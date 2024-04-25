@@ -1,0 +1,21 @@
+{
+  "Teacher answer students question": {
+    "id": "1001",
+    "moralFactorForTarget": [ "0.2", "0"],
+    "moralFactorForAuthor": [ "0", "0" ],
+    "name": "Teacher answer students question",
+    "nameInRussian": "Преподаватель отвечает на вопрос студента",
+    "responseActionOn": "Student Ask Question During Lecture",
+    "actionAuthor": "Teacher"
+  },
+
+  "Teacher ignore students question": {
+    "id": "1002",
+    "moralFactorForTarget": [ "-0.2", "0" ],
+    "moralFactorForAuthor": [ "0", "0", ],
+    "name": "Teacher ignore students question",
+    "nameInRussian": "Преподаватель игнорирует вопрос студента",
+    "responseActionOn": "Student Ask Question During Lecture",
+    "actionAuthor": "Teacher"
+  }
+}

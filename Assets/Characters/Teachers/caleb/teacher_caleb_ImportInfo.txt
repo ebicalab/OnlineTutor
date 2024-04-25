@@ -1,0 +1,8 @@
+logType=HighQuality
+generation=G3Plus
+isLOD=false
+qualEyes=Parallax
+qualHair=TwoPass
+bakeIsBaked=false
+bakeCustomShaders=true
+bakeSeparatePrefab=true

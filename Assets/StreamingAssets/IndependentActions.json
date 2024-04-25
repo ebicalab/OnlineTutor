@@ -1,0 +1,210 @@
+{
+  "lookAtTeacher": {
+    "id" : "1",
+    "moralFactorForTarget": [ "0.0", "0", "0" ],
+    "moralFactorForAuthor": [ "0.135", "0", "0.045" ],
+    "name": "lookAtTeacher",
+    "nameInRussian": "Студент смотрит на преподавателя или доску",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "doesntLookAtTeacher": {
+    "id" : "2",
+    "moralFactorForTarget": [ "0.0", "0", "0" ],
+    "moralFactorForAuthor": [ "-0.135", "0", "-0.045" ],
+    "name": "DoesntLookAtTeacher",
+    "nameInRussian": "Студент смотрит не на преподавателя и не на доску",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "Anger": {
+    "id" : "3",
+    "moralFactorForTarget": [ "-2", "-2", "0"],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Anger",
+    "nameInRussian": "Проявление эмоции - злость",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Disgust": {
+    "id" : "4",
+    "moralFactorForTarget": [ "-1", "-0.5", "0"],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Disgust",
+    "nameInRussian": "Проявление эмоции - отвращение",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Fear": {
+    "id" : "5",
+    "moralFactorForTarget": [ "-0.2", "-0.1", "0" ],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Fear",
+    "nameInRussian": "Проявление эмоции - страх",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Happiness": {
+    "id" : "6",
+    "moralFactorForTarget": [ "0.3", "0.3", "0"],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Happiness",
+    "nameInRussian": "Проявление эмоции - радость",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Sadness": {
+    "id" : "7",
+    "moralFactorForTarget": [ "-0.05", "-0.04", "0" ],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Sadness",
+    "nameInRussian": "Проявление эмоции - грусть",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Surprise": {
+    "id" : "8",
+    "moralFactorForTarget": [ "0.12", "0.18", "0" ],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Surprise",
+    "nameInRussian": "Проявление эмоции - удивление",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+  "Neutral": {
+    "id" : "9",
+    "moralFactorForTarget": [ "0.005", "0.003", "0" ],
+    "moralFactorForAuthor": [ "0", "0", "0" ],
+    "name": "Neutral",
+    "nameInRussian": "Проявление эмоции - нейтралитет",
+    "responseActionOn": "",
+    "actionAuthor": "Teacher"
+  },
+
+  "GreatButtonPressed": {
+    "id" : "10",
+    "moralFactorForTarget": [ "50", "3", "0"],
+    "moralFactorForAuthor": [ "50", "3", "0"],
+    "name": "GreatButtonPressed",
+    "nameInRussian": "Студент нажал на кнопку 'Очень нравится'",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "LikeButtonPressed": {
+    "id" : "11",
+    "moralFactorForTarget": [ "25", "3", "0"],
+    "moralFactorForAuthor": [ "25", "3", "0"],
+    "name": "LikeButtonPressed",
+    "nameInRussian": "Студент нажал на кнопку 'Нравится'",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "AverageButtonPressed": {
+    "id" : "12",
+    "moralFactorForTarget": [ "7", "3", "0"],
+    "moralFactorForAuthor": [ "7", "3", "0"],
+    "name": "AverageButtonPressed",
+    "nameInRussian": "Студент нажал на кнопку 'Средне'",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "DoesntLikeButtonPressed": {
+    "id" : "13",
+    "moralFactorForTarget": [ "-25", "3", "0"],
+    "moralFactorForAuthor": [ "-25", "3", "0"],
+    "name": "DoesntLikeButtonPressed",
+    "nameInRussian": "Студент нажал на кнопку 'Не нравится'",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "HateButtonPressed": {
+    "id" : "14",
+    "moralFactorForTarget": [ "-50", "3", "0"],
+    "moralFactorForAuthor": [ "-50", "3", "0"],
+    "name": "HateButtonPressed",
+    "nameInRussian": "Студент нажал на кнопку 'Очень не нравится'",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "test_0_20": {
+    "id" : "15",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "-20", "0", "-120"],
+    "name": "test_0_20",
+    "nameInRussian": "Студент набрал >0 и <20 баллов за тест",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "test_20_40": {
+    "id" : "16",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "-10", "0", "-60"],
+    "name": "test_20_40",
+    "nameInRussian": "Студент набрал >20 и <40 баллов за тест",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "test_40_60": {
+    "id" : "17",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "-5", "0", "-30"],
+    "name": "test_40_60",
+    "nameInRussian": "Студент набрал >40 и <60 баллов за тест",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "test_60_80": {
+    "id" : "18",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "20", "0", "60"],
+    "name": "test_60_80",
+    "nameInRussian": "Студент набрал >60 и <80 баллов за тест",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "test_80_100": {
+    "id" : "19",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "50", "0", "120"],
+    "name": "test_80_100",
+    "nameInRussian": "Студент набрал >80 и <100 баллов за тест",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "student_ask_question": {
+    "id" : "20",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "10", "40", "0"],
+    "name": "student_ask_question",
+    "nameInRussian": "Студент задал вопрос преподавателю",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "student_interrupt_lecture": {
+    "id" : "21",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "-10", "40", "0"],
+    "name": "student_interrupt_lecture",
+    "nameInRussian": "Студент прервал лекцию и начал проходить тестирование",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "student_retakes_lectures": {
+    "id" : "22",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "5", "30", "0"],
+    "name": "student_retakes_lectures",
+    "nameInRussian": "Студент перепроходит пройденную лекцию",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  },
+  "student_takes_the_lecture_in_his_order": {
+    "id" : "23",
+    "moralFactorForTarget": [ "0", "0", "0"],
+    "moralFactorForAuthor": [ "-20", "30", "0"],
+    "name": "student_takes_the_lecture_in_his_order",
+    "nameInRussian": "Студент не послушал совет преподавателя по выбору лекции",
+    "responseActionOn": "",
+    "actionAuthor": "Student"
+  }
+}

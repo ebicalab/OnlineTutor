@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\credo\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\credo\\.nuget\\packages"
+    ]
+  }
+}
