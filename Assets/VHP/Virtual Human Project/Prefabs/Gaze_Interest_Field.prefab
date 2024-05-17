@@ -68,10 +68,10 @@ SphereCollider:
   m_GameObject: {fileID: 2096622972208523352}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
-  m_Center: {x: 0, y: 0, z: 3}
+  m_Radius: 100
+  m_Center: {x: 14.192768, y: 0, z: 7.369282}
 --- !u!64 &6298763176933918346
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ MeshCollider:
   m_GameObject: {fileID: 2096622972208523352}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30

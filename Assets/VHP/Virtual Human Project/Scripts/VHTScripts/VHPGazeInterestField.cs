@@ -38,16 +38,19 @@ public class VHPGazeInterestField : MonoBehaviour
         StopAllCoroutines();
     }
 
+   
     private void OnTriggerEnter(Collider target)
     {
         // No need to check the target tag, as the probabilistic gaze configurator editor tool set the collision matrix to only enable VHPGazeComponents self collisions.
         GazeTargets.Add(target.transform);
     }
 
+    /*
     private void OnTriggerExit(Collider target)
     {
-        GazeTargets.Remove(target.transform);
+         GazeTargets.Remove(target.transform);
     }
+    */
 
     // Coroutine to check for disabled game objects in the interest field every second as they do not call the trigger exit function.
     private IEnumerator CheckForDisabledTargets()

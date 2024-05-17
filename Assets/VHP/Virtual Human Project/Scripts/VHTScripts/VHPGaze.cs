@@ -51,7 +51,7 @@ public class VHPGaze : MonoBehaviour
     [Header("Debug")]
 
     [Tooltip("Enable to display the gaze direction in the scene view.")]
-    public bool drawGazeDirection = false;
+    public bool drawGazeDirection = true;
 
     [Header("Character properties")]
 
@@ -562,6 +562,17 @@ public class VHPGaze : MonoBehaviour
             m_animator.SetLookAtPosition(m_target.transform.position);
         }
     }
+
+    public void SetGazeDirection(Vector3 direction)
+    {
+        if (gazeBehavior == GazeBehavior.STATIC || gazeBehavior == GazeBehavior.SCRIPTED)
+        {
+            Debug.Log("hi2");
+            m_targetPosition = direction.normalized * 10.0f + EyesAveragePosition; // Assuming 10 units ahead
+            m_target.transform.position = m_targetPosition;
+        }
+    }
+
 
     #endregion
 }
