@@ -177,10 +177,11 @@ public class VHPGaze : MonoBehaviour
     // Late update loop is used to override the bones animations to affect the eyes orientation procedurally.
     private void LateUpdate()
     {
+
         m_eyesAveragePosition = Vector3.Lerp(leftEyeBone.position, rightEyeBone.position, 0.5f);
 
-        m_gazeSubObjectsParent.transform.position = m_eyesAveragePosition;
-        m_gazeSubObjectsParent.transform.rotation = headBone.rotation;
+        //m_gazeSubObjectsParent.transform.position = m_eyesAveragePosition;
+       // m_gazeSubObjectsParent.transform.rotation = headBone.rotation;
 
         if (gazeBehavior == GazeBehavior.PROBABILISTIC)
         {
@@ -376,6 +377,7 @@ public class VHPGaze : MonoBehaviour
         else
             m_targetPosition = m_target.transform.position;
 
+
         // Making the eyes looking at the target with a rotation correction based on the forward axes of the bones.
         leftEyeBone.rotation = Quaternion.LookRotation(m_targetPosition - leftEyeBone.position) * m_eyeForwardAxisRotationCorrection;
         rightEyeBone.rotation = Quaternion.LookRotation(m_targetPosition - rightEyeBone.position) * m_eyeForwardAxisRotationCorrection;
@@ -563,16 +565,8 @@ public class VHPGaze : MonoBehaviour
         }
     }
 
-    public void SetGazeDirection(Vector3 direction)
-    {
-        if (gazeBehavior == GazeBehavior.STATIC || gazeBehavior == GazeBehavior.SCRIPTED)
-        {
-            Debug.Log("hi2");
-            m_targetPosition = direction.normalized * 10.0f + EyesAveragePosition; // Assuming 10 units ahead
-            m_target.transform.position = m_targetPosition;
-        }
-    }
-
 
     #endregion
+
+
 }

@@ -231,5 +231,22 @@ public class VHPEmotions : MonoBehaviour
             currentEmotionBlendShapeValues[i] = (Mathf.Clamp((currentEmotionIntensityValue * emotionMaxBlendShapeValues[i]) / 100, 0f, 100f));
     }
 
+    public void SetBlendShapeValues(float[] blendShapeValues)
+    {
+        if (blendShapeValues.Length == m_VHPmanager.TotalCharacterBlendShapes)
+        {
+                if (blendShapeValues.Length != m_VHPmanager.TotalCharacterBlendShapes)
+            {
+                Debug.LogError("Incorrect number of blend shape values sent to VHPEmotions. Expected: " + m_VHPmanager.TotalCharacterBlendShapes + ", Received: " + blendShapeValues.Length);
+                return;
+            }
+            OnEmotionsChange?.Invoke(blendShapeValues);
+        }
+        else
+        {
+            Debug.LogError("Incorrect number of blend shape values provided.");
+        }
+    }
+
     #endregion
 }
