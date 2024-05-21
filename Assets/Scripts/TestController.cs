@@ -22,25 +22,22 @@ public class TestController : MonoBehaviour
 
     string[] imageFiles;
 
+    [SerializeField] private bool print_blendshapes = false;
+    [SerializeField] private VHPManager manager;
+
     void Update()
     {
         if (random_audio)
-        {
             RandomAudio();
-        }
-
         if (random_emotion)
-        {
             RandomBlendshapes();
-        }
         if (random_slide)
-        {
             RandomSlide();
-        }
         if (turn_off_slide)
-        {
             TurnOffSlide();
-        }
+        if (print_blendshapes)
+            PrintBlendshapes();
+
     }
     private void Start()
     {
@@ -70,7 +67,6 @@ public class TestController : MonoBehaviour
         number++;
         random_audio = false;
     }
-
 
 
     void RandomBlendshapes()
@@ -110,14 +106,17 @@ public class TestController : MonoBehaviour
         return imageFiles.ToArray();
     }
 
-  
-
     void TurnOffSlide()
     {
         slideController.DisableProjector();
         turn_off_slide = false;
     }
 
+    void PrintBlendshapes()
+    {
+        manager.PrintBlendShapeNames();
+        print_blendshapes = false;
+    }
 
 
 }

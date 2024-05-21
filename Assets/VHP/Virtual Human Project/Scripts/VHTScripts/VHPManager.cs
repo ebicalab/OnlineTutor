@@ -231,6 +231,24 @@ public class VHPManager : MonoBehaviour
         }
     }
 
+    public void PrintBlendShapeNames()
+    {
+        string result = "";
+        int count = 0;
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in m_skinnedMeshRenderersWithBlendShapes)
+        {
+            count += skinnedMeshRenderer.sharedMesh.blendShapeCount;
+            for (int i = 0; i < skinnedMeshRenderer.sharedMesh.blendShapeCount; i++)
+            {
+                result += skinnedMeshRenderer.sharedMesh.GetBlendShapeName(i);
+                result += '/';
+           
+            }
+        }
+        Debug.Log("Total amount of blendshapes: " + count);
+        Debug.Log(result);
+    }
+
     // Function to reset the character blend shape values.
     private void ResetBlendShapeValues()
     {
