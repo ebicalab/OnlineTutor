@@ -5,25 +5,43 @@ using System.IO;
 
 public class TestController : MonoBehaviour
 {
-    [SerializeField] private AudioController audioController;
-    [SerializeField] private bool random_audio = false;
+    
+    
+    [SerializeField] private SlideController slideController;
     [SerializeField] private EmotionController emotionController;
+    [SerializeField] private AudioController audioController;
+    [SerializeField] private VHPManager manager;
+    [SerializeField] private WebcamController webcamController;
+    [SerializeField] private MicrophoneController microphoneController;
+
+
+
+
+
+   [SerializeField] private bool print_blendshapes = false;
+    [SerializeField] private bool random_audio = false;
+    [SerializeField] private bool random_emotion = false;
+    [SerializeField] private bool random_slide = false;
+    [SerializeField] private bool turn_off_slide = false;
+    [SerializeField] private bool take_photo = false;
+    [SerializeField] private bool start_record = false;
+
+
+
+
+
     private string pathToGreetings = "Music/GeneralSounds/Greetings";
     private int number = 0;
-    [SerializeField] private bool random_emotion = false;
     private float[] m_BlendShapes;
-    [SerializeField] private bool random_slide = false;
-    [SerializeField] private SlideController slideController;
     private int count_slide = 0;
-    [SerializeField] private bool turn_off_slide = false;
-
-
-    string path_images; // Define the path variable here
-
+    string path_images; 
     string[] imageFiles;
 
-    [SerializeField] private bool print_blendshapes = false;
-    [SerializeField] private VHPManager manager;
+
+
+    bool is_recording = false;
+
+
 
     void Update()
     {
@@ -37,6 +55,21 @@ public class TestController : MonoBehaviour
             TurnOffSlide();
         if (print_blendshapes)
             PrintBlendshapes();
+        if (take_photo)
+            Photo();
+
+        if (start_record && !is_recording)
+        {
+            is_recording = true;
+            StartRecording();
+        }
+
+        if (!start_record && is_recording)
+        {
+            StopRecordingAndSave();
+            is_recording = false;
+        }
+
 
     }
     private void Start()
@@ -117,6 +150,46 @@ public class TestController : MonoBehaviour
         manager.PrintBlendShapeNames();
         print_blendshapes = false;
     }
+
+    public void Photo()
+    {
+        string folderPath = Path.Combine(Application.dataPath, "CapturedPhotos");
+        webcamController.StartPhotoCapture(folderPath);
+        take_photo = false;
+
+    }
+
+    public void StartRecording()
+    {
+        if (microphoneController != null)
+        {
+            microphoneController.StartRecording();
+        }
+        else
+        {
+            Debug.LogWarning("MicrophoneController not found.");
+        }
+    }
+
+    // Method to stop recording and save the audio file
+    public void StopRecordingAndSave()
+    {
+        string folderPath = Path.Combine(Application.dataPath, "RecordedAudio");
+        string filePath = Path.Combine(folderPath, "AudioRecord.wav");
+
+
+        if (microphoneController != null)
+        {
+            microphoneController.StopRecordingAndSave(filePath);
+        }
+        else
+        {
+            Debug.LogWarning("MicrophoneController not found.");
+        }
+    }
+
+
+
 
 
 }
