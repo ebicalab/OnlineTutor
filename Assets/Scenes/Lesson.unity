@@ -4281,6 +4281,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 119883730836770321, guid: 4b63283467b6c664782a8cbf026e72ee, type: 3}
   m_PrefabInstance: {fileID: 618021215}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &621548604
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 621548605}
+  m_Layer: 0
+  m_Name: test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &621548605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621548604}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.418302, y: 1.5704685, z: 16.71556}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &631881329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4667,19 +4697,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d22224d58528fa4cbc11b89debe71d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slideController: {fileID: 1637300770}
-  emotionController: {fileID: 1366807397}
   audioController: {fileID: 638511816}
-  manager: {fileID: 743388102}
-  webcamController: {fileID: 687490324}
-  microphoneController: {fileID: 2109617272}
-  print_blendshapes: 0
   random_audio: 0
+  emotionController: {fileID: 1366807397}
   random_emotion: 0
   random_slide: 0
+  slideController: {fileID: 1637300770}
   turn_off_slide: 0
-  take_photo: 0
-  start_record: 0
+  print_blendshapes: 0
+  manager: {fileID: 743388102}
 --- !u!1001 &667012719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4866,49 +4892,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4074824154794401117, guid: 96895d043f4340a41b3f41782601a02b, type: 3}
   m_PrefabInstance: {fileID: 687087392}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &687490322
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 687490323}
-  - component: {fileID: 687490324}
-  m_Layer: 0
-  m_Name: WebcamControll
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &687490323
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687490322}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.8168554, y: 2.350855, z: 4.226941}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2042881842}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &687490324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687490322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627b4f6e16eaed84fab1530b2858babb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &696079509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13783,8 +13766,6 @@ Transform:
   - {fileID: 644364076}
   - {fileID: 1637300769}
   - {fileID: 128426143}
-  - {fileID: 687490323}
-  - {fileID: 2109617271}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13949,49 +13930,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.19838525, y: 0.32960984, z: 0.14500004}
   m_Center: {x: 0, y: 0.1649069, z: -0.0000000037252903}
---- !u!1 &2109617270
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2109617271}
-  - component: {fileID: 2109617272}
-  m_Layer: 0
-  m_Name: MicrophoneControll
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2109617271
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2109617270}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.609724, y: 1.0007657, z: 3.0517454}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2042881842}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2109617272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2109617270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 391072dcaeb55334fb68a15e5acbe174, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2111469479
 PrefabInstance:
   m_ObjectHideFlags: 0

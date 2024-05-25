@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.IO;
 
 public class AudioController : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class AudioController : MonoBehaviour
 
     public void StartMicrophoneRecord() {
         StartCoroutine(StartMicrophoneRecordCoroutine());
-    }
+    }   
 
     private IEnumerator StartMicrophoneRecordCoroutine() {
         yield return new WaitForSeconds(2.0f);
@@ -118,6 +117,4 @@ public class AudioController : MonoBehaviour
     public float getClipTime() {
         return _audioSource.time;
     }
-
-  
 }
