@@ -5,9 +5,9 @@ using UnityEngine;
 public class GazeController : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float x;
-    [SerializeField] private float y;
-    [SerializeField] private float z;
+    [Range(10.7f, 19.7f)] [SerializeField] private float x;
+    [Range(0.25f, 6.5f)] [SerializeField] private float y;
+    [Range(3f, 15.7f)] [SerializeField] private float z;
 
     void Start()
     {
