@@ -24,6 +24,13 @@ public class TestController : MonoBehaviour
 
     [SerializeField] private bool print_blendshapes = false;
     [SerializeField] private VHPManager manager;
+    [SerializeField] private MicrophoneController microphoneController;
+
+    [SerializeField] private WebcamController webcamController;
+    [SerializeField] private bool take_photo = false;
+    [SerializeField] private bool start_record = false;
+
+    bool is_recording = false;
 
     void Update()
     {
@@ -37,6 +44,22 @@ public class TestController : MonoBehaviour
             TurnOffSlide();
         if (print_blendshapes)
             PrintBlendshapes();
+
+        if (take_photo)
+            Photo();
+
+        if (start_record && !is_recording)
+        {
+            is_recording = true;
+            StartRecording();
+        }
+
+        if (!start_record && is_recording)
+        {
+            StopRecordingAndSave();
+            is_recording = false;
+
+        }
 
     }
     private void Start()
@@ -118,5 +141,51 @@ public class TestController : MonoBehaviour
         print_blendshapes = false;
     }
 
+    public void Photo()
+    {
+        string folderPath = Path.Combine(Application.dataPath, "CapturedPhotos");
+        webcamController.StartPhotoCapture(folderPath);
+        take_photo = false;
+
+    }
+
+    public void StartRecording()
+    {
+        if (microphoneController != null)
+        {
+            microphoneController.StartRecording();
+        }
+        else
+        {
+            Debug.LogWarning("MicrophoneController not found.");
+        }
+    }
+
+    // Method to stop recording and save the audio file
+    public void StopRecordingAndSave()
+    {
+        //string folderPath = Path.Combine(Application.dataPath, "RecordedAudio");
+        //string filePath = Path.Combine(folderPath, "AudioRecord.wav");
+
+        if (microphoneController != null)
+        {
+            microphoneController.StopRecording();
+        }
+        else
+        {
+            Debug.LogWarning("MicrophoneController not found.");
+        }
+    }
+
+
+    public void TakePhoto()
+    {
+        webcamController.TakePhoto((string filePath) =>
+        {
+            Debug.Log("Photo saved at: " + filePath);
+        });
+    }
+
 
 }
+
