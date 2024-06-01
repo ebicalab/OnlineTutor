@@ -9,6 +9,12 @@ public class GazeController : MonoBehaviour
     [Range(0.25f, 6.5f)] [SerializeField] private float y;
     [Range(3f, 15.7f)] [SerializeField] private float z;
 
+    [SerializeField] private Transform student;
+    [SerializeField] private LayerMask teacherLayer;
+    [SerializeField] private LayerMask boardLayer;
+   
+    
+
     void Start()
     {
         // Initialize x, y, z with the target's initial position
@@ -31,5 +37,46 @@ public class GazeController : MonoBehaviour
             // Update target's position based on x, y, z
             target.position = new Vector3(x, y, z);
         }
+
+    
+
+        if(IsStudentLookingAtBoard())
+            Debug.Log("Student is looking at the board");
+        else if(IsStudentLookingAtTeacher())
+            Debug.Log("Student is looking at the teacher");
+        else
+            Debug.Log("Student is not looking at the teacher nor board");
+        
+
+    }
+
+
+
+    public void SetGazeDirection(Vector3 gazeDirection)
+    {
+        x = gazeDirection.x;
+        y = gazeDirection.y;
+        z = gazeDirection.z;
+    }
+
+
+    public bool IsStudentLookingAtTeacher()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(student.position, student.forward * 100, Color.red);
+        if(Physics.Raycast(student.position, student.forward, out hit)     &&
+                    hit.collider.gameObject.CompareTag("Teacher"))
+                    return true;
+        return false;
+    }
+
+    public bool IsStudentLookingAtBoard()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(student.position, student.forward * 100, Color.red);
+        if(Physics.Raycast(student.position, student.forward, out hit)     &&
+                    hit.collider.gameObject.CompareTag("Board"))
+                    return true;
+        return false;
     }
 }

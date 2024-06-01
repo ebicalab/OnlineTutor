@@ -26,8 +26,8 @@ public class TestController : MonoBehaviour
     [SerializeField] private VHPManager manager;
     [SerializeField] private MicrophoneController microphoneController;
 
-    [SerializeField] private WebcamController webcamController;
-    [SerializeField] private bool take_photo = false;
+    //[SerializeField] private WebcamController webcamController;
+    //[SerializeField] private bool take_photo = false;
     [SerializeField] private bool start_record = false;
 
     bool is_recording = false;
@@ -45,8 +45,8 @@ public class TestController : MonoBehaviour
         if (print_blendshapes)
             PrintBlendshapes();
 
-        if (take_photo)
-            Photo();
+        //if (take_photo)
+            //Photo();
 
         if (start_record && !is_recording)
         {
@@ -141,13 +141,13 @@ public class TestController : MonoBehaviour
         print_blendshapes = false;
     }
 
-    public void Photo()
-    {
-        string folderPath = Path.Combine(Application.dataPath, "CapturedPhotos");
-        webcamController.StartPhotoCapture(folderPath);
-        take_photo = false;
+   // public void Photo()
+    //{
+    //    string folderPath = Path.Combine(Application.dataPath, "CapturedPhotos");
+      //  webcamController.StartPhotoCapture(folderPath);
+       // take_photo = false;
 
-    }
+   // }
 
     public void StartRecording()
     {
@@ -178,13 +178,13 @@ public class TestController : MonoBehaviour
     }
 
 
-    public void TakePhoto()
-    {
-        webcamController.TakePhoto((string filePath) =>
-        {
-            Debug.Log("Photo saved at: " + filePath);
-        });
-    }
+   // public void TakePhoto()
+    //{
+     //   webcamController.TakePhoto((string filePath) =>
+     //   {
+      //      Debug.Log("Photo saved at: " + filePath);
+      //  });
+   // }
 
 
 }

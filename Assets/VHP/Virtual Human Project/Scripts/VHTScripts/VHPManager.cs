@@ -231,7 +231,7 @@ public class VHPManager : MonoBehaviour
         }
     }
 
-    public void PrintBlendShapeNames()
+    public string PrintBlendShapeNames()
     {
         string result = "";
         int count = 0;
@@ -245,8 +245,32 @@ public class VHPManager : MonoBehaviour
            
             }
         }
+        //remove last slash
+        result = result.Remove(result.Length - 1);
         Debug.Log("Total amount of blendshapes: " + count);
         Debug.Log(result);
+        return result;
+    }
+    
+    public string PrintBlendShapeValues()
+    {
+        string result = "";
+        int count = 0;
+
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in m_skinnedMeshRenderersWithBlendShapes)
+        {
+            count += skinnedMeshRenderer.sharedMesh.blendShapeCount;
+            for (int i = 0; i < skinnedMeshRenderer.sharedMesh.blendShapeCount; i++)
+            {
+                result += skinnedMeshRenderer.GetBlendShapeWeight(i);
+                result += ' ';
+            }
+        }
+        //remove last space
+        result = result.Remove(result.Length - 1);
+        Debug.Log(result);
+        Debug.Log("Total amount of blendshapes: " + count);
+        return result;
     }
 
     // Function to reset the character blend shape values.

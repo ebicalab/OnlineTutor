@@ -55,7 +55,7 @@ public class AudioController : MonoBehaviour
 
     private void Start() {
         if (Microphone.devices.Length <= 0) {
-            Debug.LogError("Не подключен ни один микрофон!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
         } else {
             DefaultMicroName = Microphone.devices[0];
         }
@@ -69,6 +69,7 @@ public class AudioController : MonoBehaviour
         AudioClip _clip = Resources.Load(path) as AudioClip;
         _audioSource.PlayOneShot(_clip);
     }
+     
 
     public void stopSound() {
         _audioSource.Stop();

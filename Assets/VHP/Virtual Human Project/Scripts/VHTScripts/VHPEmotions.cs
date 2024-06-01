@@ -146,9 +146,11 @@ public class VHPEmotions : MonoBehaviour
 
         for (int i = 0; i < currentEmotionsIntensityValues.Length; i++)
         {
+            
             // If a new emotion intensity value is detected and is significantly different from the previous one, the current emotion state is updated.
             if (neededEmotionsIntensityValues[i] > currentEmotionsIntensityValues[i] + 1 || neededEmotionsIntensityValues[i] < currentEmotionsIntensityValues[i] - 1)
             {
+                
                 currentEmotionsIntensityValues[i] = neededEmotionsIntensityValues[i];
 
                 m_currentEmotion = (Emotions)i;
@@ -171,6 +173,7 @@ public class VHPEmotions : MonoBehaviour
 
                 break;
             }
+            
         }
     }
 
