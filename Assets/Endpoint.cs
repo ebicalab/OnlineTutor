@@ -15,6 +15,9 @@ public class Endpoint : MonoBehaviour
     [SerializeField] private AudioController _audioController;
     [SerializeField] private SlideController _slideController;
     [SerializeField] private EmotionController _emotionController;
+    [SerializeField] private WebcamController _webcamController;
+    [SerializeField] private MicrophoneController _microphoneController;
+
     
 
     private string audioFolderPath;
@@ -23,18 +26,58 @@ public class Endpoint : MonoBehaviour
 
     void Start()
     {
+
+        _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_audio", request =>
+        {
+            var audioFilePath = ThreadingHelper.Instance.ExecuteAsync(() =>
+            {
+                return _microphoneController.GetMostRecentAudioFile();
+            });
+            if(audioFilePath!=null){
+            byte[] audioBytes = File.ReadAllBytes(audioFilePath);
+            request.CreateResponse().Body(audioBytes).SendAsync();
+            _microphoneController.Delete();
+            }
+            else{
+                request.CreateResponse().Body("0").SendAsync();
+                _microphoneController.Delete();
+            }
+        });
+
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/location", request =>
         {
-            var position = ThreadingHelper.Instance.ExecuteSync(() =>
+            var position = ThreadingHelper.Instance.ExecuteAsync(() =>
             {
                 return _student.transform.position;
             });
             request.CreateResponse().BodyJson(position).SendAsync();
         });
 
+
+         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_photo", request =>
+        {
+            var photoPath = ThreadingHelper.Instance.ExecuteAsync(() =>
+            {
+                return _webcamController.CapturePhoto();
+            });
+
+            if (photoPath != null)
+            {
+                byte[] photoBytes = File.ReadAllBytes(photoPath);
+                request.CreateResponse().Body(photoBytes).SendAsync();
+                _webcamController.Delete();
+            }
+            else
+            {
+                request.CreateResponse().Status(500).Body("Failed to capture photo").SendAsync();
+            }
+        });
+    
+
+
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/teacher", request =>
         {
-            bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
+            bool isLooking = ThreadingHelper.Instance.ExecuteAsync(() =>
             {
                 return _gazeController.IsStudentLookingAtTeacher();
             });
@@ -44,7 +87,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/board", request =>
         {
-            bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
+            bool isLooking = ThreadingHelper.Instance.ExecuteAsync(() =>
             {
                 return _gazeController.IsStudentLookingAtBoard();
             });
@@ -116,6 +159,53 @@ public class Endpoint : MonoBehaviour
             }
         });
 
+        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/upload_audio", request =>
+    {
+        try
+        {
+            var file = request.BodyBytes;
+                    if (file == null || file.Length == 0)
+                    {
+                        throw new System.Exception("No audio data received.");
+                    }
+
+            ThreadingHelper.Instance.ExecuteAsync(() =>
+                { 
+                    _audioController.Delete();  
+                    
+                    var uploadFolderPath = $"{Application.dataPath}/Resources/Uploads";
+
+                    if (!Directory.Exists(uploadFolderPath))
+                        {
+                    Directory.CreateDirectory(uploadFolderPath);
+                        }
+
+                    string name = $"recording_{System.DateTime.Now:yyyy-MM-dd_HH-mm-ss}.wav";
+                    string filePath = Path.Combine(uploadFolderPath, name);
+
+                    File.WriteAllBytes(filePath, file);
+                    
+
+                    Debug.Log("Audio received and saved: " + filePath);
+
+
+                    
+                    
+                    _audioController.StopCurrentClip();    
+                    _audioController.playShortSound(name);    
+                         
+                    
+                });
+
+            request.CreateResponse().Body("Audio received and saved.").SendAsync();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Error processing audio upload request: " + ex.Message);
+            request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
+        }
+    });
+
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/blendshapes_names", request =>
         {
@@ -183,7 +273,7 @@ public class Endpoint : MonoBehaviour
                 Debug.Log("Error processing disgust request: " + ex.Message);
                 request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
             }
-
+                                                                                                    
         });
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/fear", request =>
@@ -264,30 +354,7 @@ public class Endpoint : MonoBehaviour
 
         });
 
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/surprise", request =>
-        {
-            try
-            {
-                var value = (float) Convert.ToDouble(request.Body);
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
-                }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("surprise", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing surprise request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
+    
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/surprise", request =>
         {

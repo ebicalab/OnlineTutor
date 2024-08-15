@@ -34,18 +34,10 @@ public class GazeController : MonoBehaviour
     {
         if (target != null)
         {
-            // Update target's position based on x, y, z
             target.position = new Vector3(x, y, z);
         }
 
     
-
-        if(IsStudentLookingAtBoard())
-            Debug.Log("Student is looking at the board");
-        else if(IsStudentLookingAtTeacher())
-            Debug.Log("Student is looking at the teacher");
-        else
-            Debug.Log("Student is not looking at the teacher nor board");
         
 
     }

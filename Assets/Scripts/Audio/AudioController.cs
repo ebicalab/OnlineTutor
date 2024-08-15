@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
+using System.IO;
+using UnityEditor;
+
+
+
 
 public class AudioController : MonoBehaviour
 {
@@ -12,6 +18,13 @@ public class AudioController : MonoBehaviour
     private static bool canRecordMicro = true;
     [Range(0.0f, 0.1f)] [SerializeField] private float minLoudThreeshold = 0.01f;
     [SerializeField] private static int sampleWindow = 10000;
+
+    private string directoryPath;
+
+
+
+    
+
 
 
     public void StartMicrophoneRecord() {
@@ -54,6 +67,7 @@ public class AudioController : MonoBehaviour
     }
 
     private void Start() {
+        directoryPath = $"{Application.dataPath}/Resources/Uploads";
         if (Microphone.devices.Length <= 0) {
             Debug.LogError("�� ��������� �� ���� ��������!");
         } else {
@@ -65,9 +79,19 @@ public class AudioController : MonoBehaviour
         _audioSource.PlayOneShot(clip);
     }
 
-    public void playShortSound(string path) {
-        AudioClip _clip = Resources.Load(path) as AudioClip;
-        _audioSource.PlayOneShot(_clip);
+    public void playShortSound(string path){
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+        AssetDatabase.Refresh();
+        AudioClip _clip = Resources.Load<AudioClip>("Uploads/"+fileNameWithoutExtension);
+        if (_clip != null)
+        {
+            Debug.Log("AudioClip loaded successfully.");
+            _audioSource.PlayOneShot(_clip);
+        }
+        else
+        {
+           Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
+        }
     }
      
 
@@ -118,4 +142,30 @@ public class AudioController : MonoBehaviour
     public float getClipTime() {
         return _audioSource.time;
     }
+
+    public void Delete()
+    {
+         if (Directory.Exists(directoryPath))
+            {
+                try
+                {
+                    DirectoryInfo di = new DirectoryInfo(directoryPath);
+                    foreach (FileInfo file in di.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    Debug.Log("All received audio deleted.");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Failed to delete received audio: " + ex.Message);
+                }
+            }
+
+    }
+
+     void OnDestroy()
+     {
+        Delete();
+     }
 }
