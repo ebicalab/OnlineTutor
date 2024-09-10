@@ -34,6 +34,9 @@ public class TestController : MonoBehaviour
     [SerializeField] private WebcamController webcamController;
     [SerializeField] private bool take_photo = false;
 
+
+
+
     void Update()
     {
         if (random_audio)

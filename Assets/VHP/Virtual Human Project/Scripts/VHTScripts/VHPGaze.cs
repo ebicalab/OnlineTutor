@@ -204,6 +204,7 @@ public class VHPGaze : MonoBehaviour
             CalculateBlinkingBlendShapesIntensity();
 
         SetCurrentGazeBlendShapesIntensity();
+        
     }
 
     private void OnDisable()
@@ -340,7 +341,7 @@ public class VHPGaze : MonoBehaviour
             m_interestFieldInstance.transform.GetComponent<MeshCollider>().enabled = !agentMode;
             m_interestFieldInstance.transform.GetComponent<SphereCollider>().enabled = agentMode;
 
-            m_target.GetComponent<VHPGazeTarget>().VHPGazeInterestField = m_interestFieldInstance.GetComponent<VHPGazeInterestField>();
+            m_target.GetComponent<VHPGazeTarget>().VHPGazeInterestField = m_interestFieldInstance.GetComponent<VHPGazeInterestField>(); 
 
             m_characterModeSet = agentMode;
             m_interestFieldLoaded = true;

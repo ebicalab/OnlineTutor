@@ -29,6 +29,12 @@ public class VHPGazeInterestField : MonoBehaviour
     private void OnEnable()
     {
         // Starting a coroutine to check for disabled game objects in the interest field every second as they do not call the trigger exit function.
+
+        
+        GazeTargets.Clear();
+
+
+
         StartCoroutine(CheckForDisabledTargets());
     }
 
@@ -55,6 +61,8 @@ public class VHPGazeInterestField : MonoBehaviour
     // Coroutine to check for disabled game objects in the interest field every second as they do not call the trigger exit function.
     private IEnumerator CheckForDisabledTargets()
     {
+       
+
         if (GazeTargets.Any())
         {
             // Inverted for loop avoiding null reference exceptions when removing a disabled element from the list.

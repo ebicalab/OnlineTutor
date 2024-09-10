@@ -22,32 +22,52 @@ public class EmotionController : MonoBehaviour
         StartCoroutine(TransitionEmotion(name, value, transitionDuration));
     }
 
-    private IEnumerator TransitionEmotion(string name, float targetValue, float duration){
-
+    private IEnumerator TransitionEmotion(string name, float targetValue, float duration)
+    {
         float currentValue = GetCurrentEmotionValue(name);
         float elapsedTime = 0f;
-        
 
         string currentEmotion = GetActiveEmotion();
         float currentEmotionValue = GetCurrentEmotionValue(currentEmotion);
 
-        while(elapsedTime<duration){
-            elapsedTime += Time.deltaTime;
-            float newValue = Mathf.Lerp(currentEmotionValue, 0, elapsedTime / duration);
-            ApplyEmotionValue(currentEmotion, newValue);
-            yield return null;
-        }
-        elapsedTime = 0f;
+        if (name == currentEmotion)
+        {
+            while (elapsedTime < duration)
+            {
+                Debug.Log("!!!!!!!");
+                elapsedTime += Time.deltaTime;
+                float newValue = Mathf.Lerp(currentValue, targetValue, elapsedTime / duration);
+                ApplyEmotionValue(name, newValue);
+                yield return null;
+            }
 
-        while(elapsedTime < duration){
-            elapsedTime += Time.deltaTime;
-            float newValue = Mathf.Lerp(currentValue, targetValue, elapsedTime / duration);
-            ApplyEmotionValue(name, newValue);
-            yield return null;
+            ApplyEmotionValue(name, targetValue);
         }
+        else
+        {
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float newValue = Mathf.Lerp(currentEmotionValue, 0, elapsedTime / duration);
+                ApplyEmotionValue(currentEmotion, newValue);
+                yield return null;
+            }
 
-        ApplyEmotionValue(name, targetValue);
+            elapsedTime = 0f;
+            float targetEmotionValue = GetCurrentEmotionValue(name); // Get the initial value for the target emotion
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float newValue = Mathf.Lerp(currentValue, targetValue, elapsedTime / duration);
+                ApplyEmotionValue(name, newValue);
+                yield return null;
+            }
+
+            ApplyEmotionValue(name, targetValue);
+        }
     }
+
 
     private float GetCurrentEmotionValue(string name){
         switch(name){

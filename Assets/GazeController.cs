@@ -10,10 +10,15 @@ public class GazeController : MonoBehaviour
     [Range(3f, 15.7f)] [SerializeField] private float z;
 
     [SerializeField] private Transform student;
-    [SerializeField] private LayerMask teacherLayer;
-    [SerializeField] private LayerMask boardLayer;
-   
-    
+    [SerializeField] private Transform eyes;
+    [SerializeField] private Transform mouth;
+    [SerializeField] private Transform left;
+    [SerializeField] private Transform right;
+
+
+
+
+
 
     void Start()
     {
@@ -28,6 +33,7 @@ public class GazeController : MonoBehaviour
         {
             Debug.LogError("Target is not assigned.");
         }
+
     }
 
     void Update()
@@ -37,8 +43,17 @@ public class GazeController : MonoBehaviour
             target.position = new Vector3(x, y, z);
         }
 
-    
-        
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+            SetGazeDirectionDetermined(1);
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            SetGazeDirectionDetermined(2);
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+            SetGazeDirectionDetermined(3);
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+            SetGazeDirectionDetermined(4);
+
+
 
     }
 
@@ -70,5 +85,30 @@ public class GazeController : MonoBehaviour
                     hit.collider.gameObject.CompareTag("Board"))
                     return true;
         return false;
+    }
+
+    public void SetGazeDirectionDetermined(int direction)
+    {
+        switch(direction){
+
+            case 1:
+                //eyes     
+                SetGazeDirection(eyes.position);               
+                break;
+            case 2:
+                //mouth
+                SetGazeDirection(mouth.position);
+                break;
+            case 3:
+                //right
+                SetGazeDirection(right.position);
+                break;
+            case 4:
+                //left
+                SetGazeDirection(left.position);
+                break;
+            
+        };
+
     }
 }

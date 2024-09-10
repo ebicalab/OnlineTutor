@@ -117,6 +117,7 @@ public class VHPGazeTarget : MonoBehaviour
     private IEnumerator ProbabilisticGazeBehavior()
     {
         Vector3 aimedTargetPosition;
+       
 
         // Calling the target selection and the targets ponderation fuction when the interest field contains any target.
         if (VHPGazeInterestField && VHPGazeInterestField.GazeTargets.Any())
@@ -125,6 +126,7 @@ public class VHPGazeTarget : MonoBehaviour
                 transform.parent = VHPGaze.transform;
 
             aimedTargetPosition = TargetSelection(TargetsPonderation());
+
         }
 
         // Setting a default gaze target position when the interest field does not contain any target. 
@@ -256,6 +258,8 @@ public class VHPGazeTarget : MonoBehaviour
         if (m_targetSwitchingWaitingDuration >= Random.Range(2f, 4f) || m_targetPositionsListSize != orderedTargetPositions.Count)
         {
             m_targetPositionsListSize = orderedTargetPositions.Count;
+
+            
 
             float totalTargetsWeight = 0;
 
