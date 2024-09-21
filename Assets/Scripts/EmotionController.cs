@@ -34,7 +34,7 @@ public class EmotionController : MonoBehaviour
         {
             while (elapsedTime < duration)
             {
-                Debug.Log("!!!!!!!");
+                
                 elapsedTime += Time.deltaTime;
                 float newValue = Mathf.Lerp(currentValue, targetValue, elapsedTime / duration);
                 ApplyEmotionValue(name, newValue);

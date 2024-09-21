@@ -18,6 +18,8 @@ public class Endpoint : MonoBehaviour
     [SerializeField] private WebcamController _webcamController;
     [SerializeField] private MicrophoneController _microphoneController;
 
+    private List<string> _emotions;
+
 
 
     private string audioFolderPath;
@@ -36,6 +38,8 @@ public class Endpoint : MonoBehaviour
             if (audioFilePath != null)
             {
                 byte[] audioBytes = File.ReadAllBytes(audioFilePath);
+
+
                 request.CreateResponse().Body(audioBytes).SendAsync();
                 _microphoneController.Delete();
             }
@@ -83,7 +87,9 @@ public class Endpoint : MonoBehaviour
             {
                 return _gazeController.IsStudentLookingAtTeacher();
             });
+
             string isLookingString = isLooking ? "true" : "false";
+
             request.CreateResponse().Body(isLookingString).SendAsync();
         });
 
@@ -229,181 +235,34 @@ public class Endpoint : MonoBehaviour
             request.CreateResponse().Body(position).SendAsync();
         });
 
+        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion", request => {
+            try {
+                var body = request.Body;
+                var json = JsonUtility.FromJson<EmotionRequest>(body);
 
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/anger", request =>
-        {
-            try
-            {
-                var value = (float)Convert.ToDouble(request.Body);
+                var allowedEmotions = new HashSet<string> { "anger", "disgust", "fear", "happiness", "sadness", "surprise" };
 
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
+                if (!allowedEmotions.Contains(json.emotion)) {
+                    throw new System.Exception("Invalid emotion. Allowed emotions are: anger, disgust, fear, happiness, sadness, surprise.");
                 }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("anger", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing anger request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
 
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/disgust", request =>
-        {
-            try
-            {
-                var value = (float)Convert.ToDouble(request.Body);
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
+                if (json.intensity < 0 || json.intensity > 100) {
+                    throw new System.Exception("Intensity must be between 0 and 100.");
                 }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("disgust", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing disgust request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/fear", request =>
-        {
-            try
-            {
-
-                var value = (float)Convert.ToDouble(request.Body);
-
-
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
-                }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("fear", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing fear request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/happiness", request =>
-        {
-            try
-            {
-                var value = (float)Convert.ToDouble(request.Body);
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
-                }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("happiness", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing happiness request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/sadness", request =>
-        {
-            try
-            {
-                var value = (float)Convert.ToDouble(request.Body);
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
-                }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("sadness", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing sadness request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
-
-
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/surprise", request =>
-        {
-            try
-            {
-                var value = (float)Convert.ToDouble(request.Body);
-
-
-                if (value < 0 || value > 100)
-                {
-                    throw new System.Exception("Value must be between 0 and 100.");
-                }
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    _emotionController.SetEmotion("surprise", value);
-                });
-                request.CreateResponse().SendAsync();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing surprise request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion/neutral", request =>
-        {
-            try
-            {
-                var value = 0;
 
                 ThreadingHelper.Instance.ExecuteAsync(() =>
                 {
-                    _emotionController.SetEmotion("neutral", value);
+                    _emotionController.SetEmotion(json.emotion, json.intensity);
                 });
+
                 request.CreateResponse().SendAsync();
             }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing surprise request: " + ex.Message);
+            catch (System.Exception ex) {
+                Debug.Log("Error processing emotion request: " + ex.Message);
                 request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
             }
-
         });
+
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_blendshapes", request =>
         {
@@ -440,4 +299,14 @@ public class Endpoint : MonoBehaviour
     }
 
 
+}
+
+[System.Serializable]
+public class EmotionRequest {
+    public string emotion;
+    public float intensity;
+}
+
+public class LookingTeacher {
+    public bool isLooking; 
 }
