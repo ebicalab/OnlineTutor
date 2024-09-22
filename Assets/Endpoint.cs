@@ -110,6 +110,8 @@ public class Endpoint : MonoBehaviour
             {
                 
                 var value = (int)Convert.ToInt32(request.Body);
+                if(value>4||value<1)
+                    request.CreateResponse().Status(500).Body("Invalise input data");
 
                 Debug.Log("Received gaze direction: " + value);
 
@@ -238,6 +240,7 @@ public class Endpoint : MonoBehaviour
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion", request => {
             try {
                 var body = request.Body;
+
                 var json = JsonUtility.FromJson<EmotionRequest>(body);
 
                 var allowedEmotions = new HashSet<string> { "anger", "disgust", "fear", "happiness", "sadness", "surprise" };
@@ -307,6 +310,8 @@ public class EmotionRequest {
     public float intensity;
 }
 
-public class LookingTeacher {
-    public bool isLooking; 
+[System.Serializable]
+public class LookRequest {
+    public string direction;
+
 }

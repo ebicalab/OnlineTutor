@@ -26,7 +26,7 @@ public class MicrophoneController : MonoBehaviour
 
     void Update()
     {
-         if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             StartRecording();
         }
