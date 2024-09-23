@@ -6,6 +6,8 @@ using System.IO;
 using System;
 using UnityEngine.Networking;
 
+
+
 public class Endpoint : MonoBehaviour
 {
     [SerializeField] private RestServer.RestServer _server;
@@ -38,9 +40,9 @@ public class Endpoint : MonoBehaviour
             if (audioFilePath != null)
             {
                 byte[] audioBytes = File.ReadAllBytes(audioFilePath);
-
-
+                
                 request.CreateResponse().Body(audioBytes).SendAsync();
+
                 _microphoneController.Delete();
             }
             else
@@ -87,9 +89,7 @@ public class Endpoint : MonoBehaviour
             {
                 return _gazeController.IsStudentLookingAtTeacher();
             });
-
             string isLookingString = isLooking ? "true" : "false";
-
             request.CreateResponse().Body(isLookingString).SendAsync();
         });
 
@@ -108,21 +108,24 @@ public class Endpoint : MonoBehaviour
         {
             try
             {
-                
-                var value = (int)Convert.ToInt32(request.Body);
-                if(value>4||value<1)
-                    request.CreateResponse().Status(500).Body("Invalise input data");
+                if (string.IsNullOrEmpty(request.Body)) 
+                    throw new System.Exception("No data provided. Please send a valid json");
+        
+                var value = request.JsonBody<Look>();
+
+                if(value.look_direction>4||value.look_direction<1)
+                    request.CreateResponse().Status(500).Body("Invalid input data");
 
                 Debug.Log("Received gaze direction: " + value);
 
                 ThreadingHelper.Instance.ExecuteAsync(() =>
                 {
                     Debug.Log("Setting gaze direction");
-                    _gazeController.SetGazeDirectionDetermined(value);
+                    _gazeController.SetGazeDirectionDetermined(value.look_direction);
                 });
 
                 Debug.Log("Gaze direction set successfully");
-                request.CreateResponse().SendAsync();
+                request.CreateResponse().Status(200).Body("Gaze direction set successfully").SendAsync();
             }
             catch (System.Exception ex)
             {
@@ -176,6 +179,7 @@ public class Endpoint : MonoBehaviour
             try
             {
                 var file = request.BodyBytes;
+
                 if (file == null || file.Length == 0)
                 {
                     throw new System.Exception("No audio data received.");
@@ -240,6 +244,9 @@ public class Endpoint : MonoBehaviour
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion", request => {
             try {
                 var body = request.Body;
+                if (string.IsNullOrEmpty(body)) 
+                    throw new System.Exception("No data provided. Please send a valid emotion and intensity.");
+        
 
                 var json = JsonUtility.FromJson<EmotionRequest>(body);
 
@@ -258,7 +265,7 @@ public class Endpoint : MonoBehaviour
                     _emotionController.SetEmotion(json.emotion, json.intensity);
                 });
 
-                request.CreateResponse().SendAsync();
+                request.CreateResponse().Status(500).Body("emotion set successfully").SendAsync();
             }
             catch (System.Exception ex) {
                 Debug.Log("Error processing emotion request: " + ex.Message);
@@ -272,6 +279,8 @@ public class Endpoint : MonoBehaviour
             try
             {
                 string value = request.Body;
+                if (string.IsNullOrEmpty(value)); 
+                    throw new System.Exception("No data provided. Please send a valid set of blendshape values");
 
 
                 //if (!checkCorrect(value))
@@ -311,7 +320,6 @@ public class EmotionRequest {
 }
 
 [System.Serializable]
-public class LookRequest {
-    public string direction;
-
+public class Look {
+    public int look_direction;
 }
