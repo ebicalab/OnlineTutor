@@ -33,6 +33,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_audio", request =>
         {
+            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             var audioFilePath = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _microphoneController.GetMostRecentAudioFile();
@@ -54,6 +55,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/location", request =>
         {
+            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             var position = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _student.transform.position;
@@ -64,6 +66,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_photo", request =>
         {
+            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             var photoPath = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _webcamController.CapturePhoto();
@@ -85,6 +88,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/teacher", request =>
         {
+            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _gazeController.IsStudentLookingAtTeacher();
@@ -95,6 +99,7 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/board", request =>
         {
+            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _gazeController.IsStudentLookingAtBoard();
