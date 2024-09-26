@@ -1,11 +1,13 @@
 using UnityEngine;
 using Mono.Data.Sqlite;
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
-//[InitializeOnLoad]
 public static class PlayStateNotifier
 {
+    #if UNITY_EDITOR
     static PlayStateNotifier() {
         EditorApplication.playModeStateChanged += ModeChanged;
     }
@@ -20,10 +22,7 @@ public static class PlayStateNotifier
                 if (userId.HasValue) {
 
                     double[] studentAppraisals = MoralSchema.studentAppraisals;
-
                     double[] studentFeelings = MoralSchema.studentFeelings;
-
-                    //string studentCharacteristic = MoralSchema.studentCharacteristic;
 
                     using (var connection = new SqliteConnection(DBInfo.DataBaseName)) {
                         try {
@@ -64,4 +63,5 @@ public static class PlayStateNotifier
             GameController.pipeClientProcess?.Kill();
         }
     }
+    #endif
 }

@@ -79,20 +79,27 @@ public class AudioController : MonoBehaviour
         _audioSource.PlayOneShot(clip);
     }
 
-    public void playShortSound(string path){
-        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-        AssetDatabase.Refresh();
-        AudioClip _clip = Resources.Load<AudioClip>("Uploads/"+fileNameWithoutExtension);
-        if (_clip != null)
-        {
-            Debug.Log("AudioClip loaded successfully.");
-            _audioSource.PlayOneShot(_clip);
-        }
-        else
-        {
-           Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
-        }
+    public void playShortSound(string path)
+{
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+    
+    #if UNITY_EDITOR
+    AssetDatabase.Refresh(); // This will refresh the database only in the editor.
+    #endif
+
+    AudioClip _clip = Resources.Load<AudioClip>("Uploads/" + fileNameWithoutExtension);
+    
+    if (_clip != null)
+    {
+        Debug.Log("AudioClip loaded successfully.");
+        _audioSource.PlayOneShot(_clip);
     }
+    else
+    {
+        Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
+    }
+}
+
      
 
     public void stopSound() {

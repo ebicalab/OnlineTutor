@@ -360,9 +360,11 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: This app uses the camera to capture live video for interactive
+    features.
   locationUsageDescription: 
-  microphoneUsageDescription: 
+  microphoneUsageDescription: This app uses the microphone to capture audio for interactive
+    features.
   bluetoothUsageDescription: 
   switchNMETAOverride: 
   switchNetLibKey: 
