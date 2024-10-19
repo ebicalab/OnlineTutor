@@ -62,7 +62,7 @@ public class MicrophoneController2 : MonoBehaviour
                 string clipBase64 = ACToBS64(trimmedClip);
 
                 // Await the async task
-                string response = await _apiController.SendAudioToSpeechAPI(clipBase64);
+                string response = _apiController.SendAudioToSpeechAPI(clipBase64);//SendAudioToSpeechAPI
                 AudioClip resultClip = Base64ToAudioClip(response, "response");
 
                 // Play the result

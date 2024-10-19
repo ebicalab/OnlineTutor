@@ -6557,7 +6557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acdbe07936462b409b49a2da3c3b4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioController: {fileID: 0}
+  _audioController: {fileID: 1248814262}
 --- !u!1001 &1071586745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10457,8 +10457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f146656d08bc948bbbb7a93f0542c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _apiController: {fileID: 0}
-  _audioController: {fileID: 0}
+  _apiController: {fileID: 1051634032}
+  _audioController: {fileID: 1248814262}
 --- !u!1001 &1462656157
 PrefabInstance:
   m_ObjectHideFlags: 0
