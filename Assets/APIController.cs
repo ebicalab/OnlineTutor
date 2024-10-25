@@ -18,7 +18,7 @@ public class APIController : MonoBehaviour {
     [SerializeField] private string URL = "http://127.0.0.1:5000";
     [SerializeField] private AudioController _audioController;
 
-    string SendAudioToSpeechAPI(string audioBase64) {
+    public string SendAudioToSpeechAPI(string audioBase64) {
         string url = URL + "/speech";
         var requestData = new {
             audio_base64 = audioBase64
@@ -49,6 +49,6 @@ public class APIController : MonoBehaviour {
             .Catch(error => {
                 Debug.LogError($"Error sending audio data: {error.Message}");
             });
-            return 
+            return "hi";
     }
 }
