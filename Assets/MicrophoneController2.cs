@@ -46,38 +46,57 @@ public class MicrophoneController2 : MonoBehaviour
         }
     }
 
-    public async void StopRecording()  // Make this method async
-    {
-        if (isRecording)
-        {
+    public async void StopRecording() {
+        if (isRecording) {
             isRecording = false;
             int recordingEndPosition = Microphone.GetPosition(null);
             Microphone.End(null);
 
-            if (recordingEndPosition > recordingStartPosition)
-            {
+            if (recordingEndPosition > recordingStartPosition) {
                 int recordingLength = recordingEndPosition - recordingStartPosition;
                 AudioClip trimmedClip = TrimAudioClip(audioClip, recordingStartPosition, recordingLength);
-
                 string clipBase64 = ACToBS64(trimmedClip);
 
-                // Await the async task
-                string response = _apiController.SendAudioToSpeechAPI(clipBase64);//SendAudioToSpeechAPI
-                AudioClip resultClip = Base64ToAudioClip(response, "response");
+                string jsonResponse = await _apiController.postRequestAsync(clipBase64);
+                Debug.Log("Received: " + jsonResponse);
 
-                // Play the result
-                _audioController.playShortSound(resultClip);
+                if (jsonResponse != null) {
+                    SpeechResponse speechResponse = JsonUtility.FromJson<SpeechResponse>(jsonResponse);
+
+
+                    var uploadFolderPath = $"{Application.dataPath}/Resources/Uploads";
+                    if (!Directory.Exists(uploadFolderPath)) {
+                        Directory.CreateDirectory(uploadFolderPath);
+                    }
+                    string name = $"recording_{System.DateTime.Now:yyyy-MM-dd_HH-mm-ss}.wav";
+                    string filePath = Path.Combine(uploadFolderPath, name);
+             
+                    SaveWavToFile(speechResponse.audio_base64, filePath);
+
+                    _audioController.playShortSound(name);
+                }
+                else {
+                    Debug.LogWarning("Received null response from API.");
+                }
             }
-            else
-            {
+            else {
                 Debug.LogWarning("Failed to get recording position.");
             }
         }
-        else
-        {
+        else {
             Debug.LogWarning("Not currently recording.");
         }
     }
+
+    private void SaveWavToFile(string base64, string filePath) {
+        byte[] wavData = Convert.FromBase64String(base64);
+        File.WriteAllBytes(filePath, wavData);
+        Debug.Log($"WAV file saved to: {filePath}");
+    }
+
+
+
+
 
     private AudioClip TrimAudioClip(AudioClip clip, int startSample, int lengthSamples)
     {
@@ -127,23 +146,14 @@ public class MicrophoneController2 : MonoBehaviour
         }
     }
 
-    public static AudioClip Base64ToAudioClip(string base64, string clipName)
-    {
-        byte[] wavData = Convert.FromBase64String(base64);
-        return ConvertWavToAudioClip(wavData, clipName);
+   
+
+
+
+
+    [System.Serializable]
+    public class SpeechResponse {
+        public string audio_base64; // Matches the key in the JSON response
     }
 
-    private static AudioClip ConvertWavToAudioClip(byte[] wavData, string clipName)
-    {
-        int channelCount = 2;  // Assuming stereo
-        int sampleRate = 44100;  // Change as necessary
-        int sampleCount = wavData.Length / 4;  // 16-bit PCM (2 bytes per sample)
-        float[] samples = new float[sampleCount];
-
-        Buffer.BlockCopy(wavData, 44, samples, 0, wavData.Length - 44);  // Skip the header
-
-        AudioClip audioClip = AudioClip.Create(clipName, sampleCount, channelCount, sampleRate, false);
-        audioClip.SetData(samples, 0);
-        return audioClip;
-    }
 }

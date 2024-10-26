@@ -25,12 +25,32 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: a2b9bfad379ddaa43b51a834f95bf2b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _CFULCMask:
         m_Texture: {fileID: 2800000, guid: 3103cac87e9bb1f4196b04a597d35cac, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorBlendMap:
         m_Texture: {fileID: 2800000, guid: 8df2529500e056e47b40d2f08add43fd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DiffuseMap:
@@ -49,8 +69,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: 2fce920536d58984088758e37bce3eda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: a2b9bfad379ddaa43b51a834f95bf2b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 2800000, guid: 5e21578de6adc5547aac86708a5a4d64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MicroNormalMap:
@@ -65,12 +93,24 @@ Material:
         m_Texture: {fileID: 2800000, guid: 92d82bc8d39f492479436aaa0e0ce815, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _RGBAMask:
         m_Texture: {fileID: 2800000, guid: 1fd94112e2a689b4e8f5c2ccf5b25220, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SSSMap:
         m_Texture: {fileID: 2800000, guid: 4f22a93d9664e94488867654bdd5d919, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
@@ -95,6 +135,7 @@ Material:
     - _AScatterScale: 1
     - _ASmoothnessMod: -0.389
     - _AddPrecomputedVelocity: 0
+    - _AlphaClip: 0
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
@@ -102,15 +143,23 @@ Material:
     - _AlphaToMaskInspectorValue: 0
     - _BScatterScale: 1
     - _BSmoothnessMod: 0.088
+    - _Blend: 0
     - _BlendMode: 0
+    - _BumpScale: 1
     - _CheekScatterScale: 1
     - _CheekSmoothnessMod: 0
     - _ChinScatterScale: 1
     - _ChinSmoothnessMod: 0
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
     - _ColorBlendStrength: 0
+    - _Cull: 2
     - _CullMode: 2
     - _CullModeForward: 2
+    - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
     - _DiffusionProfileHash: 3.6477203
     - _DoubleSidedEnable: 0
     - _DoubleSidedNormalMode: 2
@@ -119,11 +168,16 @@ Material:
     - _EarSmoothnessMod: -0.122
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
     - _ForeheadScatterScale: 1
     - _ForeheadSmoothnessMod: 0
     - _GScatterScale: 1
     - _GSmoothnessMod: -0.029
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
     - _LipsCavityAO: 2.5
+    - _Metallic: 0
     - _MicroNormalStrength: 0.8
     - _MicroNormalTiling: 20
     - _MicroSmoothnessMod: -0.04
@@ -133,18 +187,25 @@ Material:
     - _NormalBlendStrength: 0
     - _NormalStrength: 1
     - _NostrilCavityAO: 4
+    - _OcclusionStrength: 1
     - _OpaqueCullMode: 2
+    - _Parallax: 0.005
+    - _QueueOffset: 0
     - _RScatterScale: 1
     - _RSmoothnessMod: -0.04
     - _RayTracing: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 1
+    - _Smoothness: 0.5
     - _SmoothnessMax: 0.77694
     - _SmoothnessMin: 0
     - _SmoothnessPower: 1.125
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StencilRef: 4
     - _StencilRefDepth: 8
@@ -158,6 +219,7 @@ Material:
     - _StencilWriteMaskMV: 40
     - _SubsurfaceScale: 0.78
     - _SupportDecals: 1
+    - _Surface: 0
     - _SurfaceType: 0
     - _ThicknessScale: 0.75
     - _TransparentBackfaceEnable: 0
@@ -172,15 +234,19 @@ Material:
     - _UpperLipScatterScale: 1
     - _UpperLipSmoothnessMod: 0
     - _UseShadowThreshold: 0
+    - _WorkflowMode: 1
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DiffusionProfileAsset: {r: 0.000007811633, g: -1.6874267e-36, b: -4.0477928e+21, a: 8.3947815e+11}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &850500937184675144
 MonoBehaviour:

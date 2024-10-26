@@ -6557,7 +6557,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acdbe07936462b409b49a2da3c3b4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  URL: http://127.0.0.1:5000
   _audioController: {fileID: 1248814262}
+  _student: {fileID: 1608374091}
+  _gazeController: {fileID: 1984934429}
+  _webcamController: {fileID: 1369227819}
+  _emotionController: {fileID: 726915674}
 --- !u!1001 &1071586745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11560,6 +11565,11 @@ Transform:
 --- !u!4 &1608374090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4459864851310106429, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
+  m_PrefabInstance: {fileID: 1608374088}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1608374091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
   m_PrefabInstance: {fileID: 1608374088}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1618576713

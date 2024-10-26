@@ -50,7 +50,7 @@ public class WebcamController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Webcam is not ready.");
+            Debug.Log("Webcam is not ready.");
             return null;
         }
     }

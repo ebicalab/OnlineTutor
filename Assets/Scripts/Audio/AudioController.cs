@@ -81,6 +81,7 @@ public class AudioController : MonoBehaviour
 
     public void playShortSound(string path)
 {
+        StopCurrentClip();
     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
     
     #if UNITY_EDITOR
