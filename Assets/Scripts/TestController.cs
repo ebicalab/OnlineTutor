@@ -33,6 +33,7 @@ public class TestController : MonoBehaviour
 
     [SerializeField] private WebcamController webcamController;
     [SerializeField] private bool take_photo = false;
+   
 
 
 
@@ -63,9 +64,8 @@ public class TestController : MonoBehaviour
         {
             StopRecordingAndSave();
             is_recording = false;
-
         }
-
+       
     }
     private void Start()
     {
@@ -168,7 +168,6 @@ public class TestController : MonoBehaviour
         }
     }
 
-    // Method to stop recording and save the audio file
     public void StopRecordingAndSave()
     {
         //string folderPath = Path.Combine(Application.dataPath, "RecordedAudio");
@@ -185,14 +184,14 @@ public class TestController : MonoBehaviour
     }
 
 
-   // public void TakePhoto()
+    // public void TakePhoto()
     //{
-     //   webcamController.TakePhoto((string filePath) =>
-     //   {
-      //      Debug.Log("Photo saved at: " + filePath);
-      //  });
-   // }
+    //   webcamController.TakePhoto((string filePath) =>
+    //   {
+    //      Debug.Log("Photo saved at: " + filePath);
+    //  });
+    // }
 
-
+    
 }
 

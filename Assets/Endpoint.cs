@@ -228,23 +228,7 @@ public class Endpoint : MonoBehaviour
         });
 
 
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/blendshapes_names", request =>
-        {
-            var position = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _emotionController.Names();
-            });
-            request.CreateResponse().Body(position).SendAsync();
-        });
-
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/blendshapes_values", request =>
-        {
-            var position = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _emotionController.Values();
-            });
-            request.CreateResponse().Body(position).SendAsync();
-        });
+      
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_emotion", request => {
             try {
@@ -279,39 +263,7 @@ public class Endpoint : MonoBehaviour
         });
 
 
-        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_blendshapes", request =>
-        {
-            try
-            {
-                string value = request.Body;
-                if (string.IsNullOrEmpty(value)); 
-                    throw new System.Exception("No data provided. Please send a valid set of blendshape values");
-
-
-                //if (!checkCorrect(value))
-                //  throw new System.Exception("The sent data is incorrect");
-
-                ThreadingHelper.Instance.ExecuteAsync(() =>
-                {
-                    //(float) Convert.ToDouble(request.Body)
-                    string[] s = value.Split(' ');
-                    float[] values = new float[s.Length];
-                    for (int i = 0; i < s.Length; i++)
-                        values[i] = (float)Convert.ToDouble(s[i]);
-
-
-                    _emotionController.SetBlendShapes(values);
-                });
-                request.CreateResponse().SendAsync();
-
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log("Error processing surprise request: " + ex.Message);
-                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
-            }
-
-        });
+        
 
     }
 
