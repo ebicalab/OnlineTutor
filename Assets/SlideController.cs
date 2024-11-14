@@ -2,25 +2,44 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using UnityEngine.UI;
-
+using System;
 
 public class SlideController : MonoBehaviour {
-    public GameObject projector;
-    public TMP_FontAsset font; // Assign this in the Inspector
+    [SerializeField ]public GameObject _projector;
+    private TMP_Text _slideText;
+
+
+
+
+    private void Start() {
+        try {
+            _slideText = GetComponentInChildren<TMP_Text>();
+            if (_slideText != null) {
+                _slideText.text = "";  // Set some initial text
+            }
+            else {
+                Debug.LogError("TextMeshPro component not found!");
+            }
+        }
+        catch (Exception e) {
+            Debug.LogError("An error occurred: " + e.Message);
+        }
+    }
 
     // Existing image setter
     public void SetImage(string path) {
-        if (projector == null) {
+        if (_projector == null) {
             Debug.LogError("Projector not assigned.");
             return;
         }
+        _slideText.text = "";
 
         Texture2D texture = LoadTexture(path);
         if (texture != null) {
             Material material = new Material(Shader.Find("HDRP/Lit"));
             material.mainTexture = texture;
 
-            var renderer = projector.GetComponent<MeshRenderer>();
+            var renderer = _projector.GetComponent<MeshRenderer>();
             if (renderer != null) {
                 var materials = renderer.materials;
                 if (materials.Length > 1) {
@@ -51,8 +70,8 @@ public class SlideController : MonoBehaviour {
     }
 
     public void DisableProjector() {
-        if (projector != null) {
-            var renderer = projector.GetComponent<MeshRenderer>();
+        if (_projector != null) {
+            var renderer = _projector.GetComponent<MeshRenderer>();
             if (renderer != null) {
                 var materials = renderer.materials;
                 materials[1].SetColor("_BaseColor", Color.clear);
@@ -62,5 +81,11 @@ public class SlideController : MonoBehaviour {
                 Debug.LogError("Projector does not have a MeshRenderer component.");
             }
         }
+    }
+
+    public void TextShow(string text)
+    {
+        DisableProjector();
+        _slideText.text = text;
     }
 }

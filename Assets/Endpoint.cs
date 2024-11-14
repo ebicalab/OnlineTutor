@@ -33,54 +33,67 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_audio", request =>
         {
-            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
-            var audioFilePath = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _microphoneController.GetMostRecentAudioFile();
-            });
-            if (audioFilePath != null)
-            {
-                byte[] audioBytes = File.ReadAllBytes(audioFilePath);
-                
-                request.CreateResponse().Body(audioBytes).SendAsync();
+            try{
+                ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
+                var audioFilePath = ThreadingHelper.Instance.ExecuteSync(() =>
+                {
+                    return _microphoneController.GetMostRecentAudioFile();
+                });
+                if (audioFilePath != null) {
+                    byte[] audioBytes = File.ReadAllBytes(audioFilePath);
 
-                _microphoneController.Delete();
+                    request.CreateResponse().Status(200).Body(audioBytes).SendAsync();
+
+                    _microphoneController.Delete();
+                }
+                else {
+                    request.CreateResponse().Status(220).Body("0").SendAsync();
+                    _microphoneController.Delete();
+                }
             }
-            else
-            {
-                request.CreateResponse().Body("0").SendAsync();
-                _microphoneController.Delete();
+            catch (Exception ex) {
+                request.CreateResponse().Status(500).Body("Error capturing audio").SendAsync();
             }
+           
         });
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/location", request =>
         {
-            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
-            var position = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _student.transform.position;
-            });
-            request.CreateResponse().BodyJson(position).SendAsync();
+            try {
+                ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
+                var position = ThreadingHelper.Instance.ExecuteSync(() => {
+                    return _student.transform.position;
+                });
+                request.CreateResponse().Status(200).BodyJson(position).SendAsync(); 
+                }
+
+
+            catch (Exception ex) {
+                request.CreateResponse().Status(500).Body("Error getting location").SendAsync();
+            }
+
         });
 
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/capture_photo", request =>
         {
-            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
-            var photoPath = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _webcamController.CapturePhoto();
-            });
+            try {
+                ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
+                var photoPath = ThreadingHelper.Instance.ExecuteSync(() => {
+                    return _webcamController.CapturePhoto();
+                });
 
-            if (photoPath != null)
-            {
+                if (photoPath == null) {
+                    throw new Exception("Failed to find photo");
+                }
+
                 byte[] photoBytes = File.ReadAllBytes(photoPath);
                 request.CreateResponse().Body(photoBytes).SendAsync();
                 _webcamController.Delete();
             }
-            else
-            {
-                request.CreateResponse().Status(500).Body("Failed to capture photo").SendAsync();
+            catch (Exception ex) {
+                Debug.Log("Error getting image: " + ex.Message);
+                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
             }
         });
 
@@ -88,24 +101,37 @@ public class Endpoint : MonoBehaviour
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/teacher", request =>
         {
+        try{
             ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
             bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
             {
                 return _gazeController.IsStudentLookingAtTeacher();
             });
             string isLookingString = isLooking ? "true" : "false";
-            request.CreateResponse().Body(isLookingString).SendAsync();
+            request.CreateResponse().Status(200).Body(isLookingString).SendAsync();
+            }
+            catch (Exception ex) {
+                Debug.Log("Error getting is_looking/teacher: " + ex.Message);
+                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
+            }
+            
         });
 
         _server.EndpointCollection.RegisterEndpoint(HttpMethod.GET, "/is_looking/board", request =>
         {
-            ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
-            bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
-            {
-                return _gazeController.IsStudentLookingAtBoard();
-            });
-            string isLookingString = isLooking ? "true" : "false";
-            request.CreateResponse().Body(isLookingString).SendAsync();
+            try{
+                ThreadingHelper.Instance.ThreadingMillisecondsTimeout = 5000;
+                bool isLooking = ThreadingHelper.Instance.ExecuteSync(() =>
+                {
+                    return _gazeController.IsStudentLookingAtBoard();
+                });
+                string isLookingString = isLooking ? "true" : "false";
+                request.CreateResponse().Status(200).Body(isLookingString).SendAsync();
+            }
+            catch(System.Exception ex){
+                Debug.Log("Error getting is_looking/board: " + ex.Message);
+                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
+            } 
         });
 
 
@@ -132,7 +158,7 @@ public class Endpoint : MonoBehaviour
                 Debug.Log("Gaze direction set successfully");
                 request.CreateResponse().Status(200).Body("Gaze direction set successfully").SendAsync();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Debug.Log("Error processing gaze direction request: " + ex.Message);
                 request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
@@ -148,7 +174,7 @@ public class Endpoint : MonoBehaviour
 
                 if (slide == null || slide.Length == 0)
                 {
-                    throw new System.Exception("No slide data received.");
+                    throw new Exception("No slide data received.");
                 }
 
 
@@ -170,7 +196,7 @@ public class Endpoint : MonoBehaviour
 
                 });
 
-                request.CreateResponse().Body("slide received and saved.").SendAsync();
+                request.CreateResponse().Status(200).Body("slide received and saved.").SendAsync();
             }
             catch (System.Exception ex)
             {
@@ -187,7 +213,7 @@ public class Endpoint : MonoBehaviour
 
                 if (file == null || file.Length == 0)
                 {
-                    throw new System.Exception("No audio data received.");
+                    throw new Exception("No audio data received.");
                 }
 
                 ThreadingHelper.Instance.ExecuteAsync(() =>
@@ -218,9 +244,9 @@ public class Endpoint : MonoBehaviour
 
                 });
 
-                request.CreateResponse().Body("Audio received and saved.").SendAsync();
+                request.CreateResponse().Status(200).Body("Audio received and saved.").SendAsync();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Debug.Log("Error processing audio upload request: " + ex.Message);
                 request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
@@ -254,16 +280,47 @@ public class Endpoint : MonoBehaviour
                     _emotionController.SetEmotion(json.emotion, json.intensity);
                 });
 
-                request.CreateResponse().Status(500).Body("emotion set successfully").SendAsync();
+                request.CreateResponse().Status(200).Body("emotion set successfully").SendAsync();
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 Debug.Log("Error processing emotion request: " + ex.Message);
                 request.CreateResponse().Status(500).Body(ex.Message).SendAsync();
             }
         });
 
-
         
+
+        _server.EndpointCollection.RegisterEndpoint(HttpMethod.POST, "/set_text", request => {
+            try {
+                var body = request.Body;
+                if (string.IsNullOrEmpty(body)) {
+                    throw new Exception("No data provided. Please send a valid JSON object.");
+                }
+
+                SlideText json;
+                try {
+                    json = JsonUtility.FromJson<SlideText>(body);
+                }
+                catch {
+                    throw new Exception("Invalid JSON format. Please ensure the JSON matches the expected structure.");
+                }
+
+                if (string.IsNullOrEmpty(json?.text)) {
+                    throw new Exception("The 'text' field is required and cannot be empty.");
+                }
+
+                Debug.Log("Received text: " + json.text);
+                ThreadingHelper.Instance.ExecuteAsync(() => {
+                    _slideController.TextShow(json.text);
+                });
+
+                request.CreateResponse().Status(200).Body("Text sent successfully").SendAsync();
+            }
+            catch (Exception ex) {
+                Debug.LogError("Error processing text request: " + ex.Message);
+                request.CreateResponse().Status(500).Body(ex.Message).SendAsync();  
+            }
+        });
 
     }
 
@@ -279,4 +336,10 @@ public class EmotionRequest {
 [System.Serializable]
 public class Look {
     public int look_direction;
+}
+
+
+[System.Serializable]
+public class SlideText {
+    public string text;
 }
