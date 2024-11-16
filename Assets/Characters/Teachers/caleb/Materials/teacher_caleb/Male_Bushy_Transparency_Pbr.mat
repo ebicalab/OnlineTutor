@@ -113,6 +113,7 @@ Material:
     - _BaseColorStrength: 1
     - _BlendMode: 0
     - _BlendStrength: 0
+    - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 0
     - _CullModeForward: 2
     - _DepthOffsetEnable: 0
@@ -120,6 +121,7 @@ Material:
     - _DepthPrepass: 0.514
     - _DiffuseStrength: 1
     - _DoubleSidedEnable: 1
+    - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 0
     - _DstBlend: 10
     - _ENUMCLIPQUALITY_ON: 0
@@ -163,7 +165,7 @@ Material:
     - _StencilWriteMaskDepth: 8
     - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 14
-    - _StencilWriteMaskMV: 40
+    - _StencilWriteMaskMV: 42
     - _SupportDecals: 1
     - _SurfaceType: 1
     - _TransparentBackfaceEnable: 1
