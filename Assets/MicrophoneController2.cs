@@ -57,7 +57,7 @@ public class MicrophoneController2 : MonoBehaviour
                 AudioClip trimmedClip = TrimAudioClip(audioClip, recordingStartPosition, recordingLength);
                 string clipBase64 = ACToBS64(trimmedClip);
 
-                string jsonResponse = await _apiController.postRequestAsync(clipBase64);
+                string jsonResponse = await _apiController.postRequestAsync(clipBase64, "speech");
                 Debug.Log("Received: " + jsonResponse);
 
                 if (jsonResponse != null) {
@@ -148,10 +148,7 @@ public class MicrophoneController2 : MonoBehaviour
 
    
 
-
-
-
-    [System.Serializable]
+    [Serializable]
     public class SpeechResponse {
         public string audio_base64; // Matches the key in the JSON response
     }

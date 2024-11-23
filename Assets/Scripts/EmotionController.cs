@@ -86,7 +86,7 @@ public class EmotionController : MonoBehaviour
             case "neutral":
                 return 0f; 
             default:
-                Debug.LogError("Invalid emotion name");
+                Debug.Log("Invalid emotion name");
                 return 0f;
         }
     }
@@ -120,7 +120,7 @@ public class EmotionController : MonoBehaviour
                 m_VHPEmotions.surprise = value;
                 break;
             default:
-                Debug.LogError("Invalid emotion name");
+                Debug.Log("Invalid emotion name");
                 break;
         }
     }

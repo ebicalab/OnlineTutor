@@ -10,20 +10,21 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.IO;
 
+[Serializable]
+public class Response {
+    public string text_question;
 
-[System.Serializable]
-public class SpeechResponse {
-    public string audio_base64;
-
-    public SpeechResponse(string audioBase64) {
-        audio_base64 = audioBase64;
+    public Response(string data_init) {
+        text_question = data_init;
     }
 }
 
-[System.Serializable]
+
+
+[Serializable]
 public class ParametersRequest {
-    public Vector3 position; 
-    public bool is_looking_teacher; 
+    public Vector3 position;
+    public bool is_looking_teacher;
     public bool is_looking_board;
     public string photo_base64;
 
@@ -35,13 +36,12 @@ public class ParametersRequest {
     }
 }
 
-[System.Serializable]
-public class ParametersResponse { //look_direction, emotion, intensity
+[Serializable]
+public class ParametersResponse {
     public int look_direction;
     public string emotion;
     public float intensity;
 }
-
 
 public class APIController : MonoBehaviour {
     [SerializeField] private string URL = "http://127.0.0.1:5000";
@@ -51,26 +51,21 @@ public class APIController : MonoBehaviour {
     [SerializeField] private WebcamController _webcamController;
     [SerializeField] private EmotionController _emotionController;
 
-
-
     void Start() {
         StartCoroutine(SendParametersEveryFourSeconds());
     }
 
-
-    public Task<string> postRequestAsync(string audioBase64) {
+    // Async POST request for audio data
+    public Task<string> postRequestAsync(string data, string type) {
         var tcs = new TaskCompletionSource<string>();
-
-        StartCoroutine(SendRequest(audioBase64, tcs));
-
+        StartCoroutine(SendRequest(data, type, tcs));
         return tcs.Task;
     }
 
-    private IEnumerator SendRequest(string audioBase64, TaskCompletionSource<string> tcs) {
-        SpeechResponse requestData = new SpeechResponse(audioBase64);
+    private IEnumerator SendRequest(string data, string type, TaskCompletionSource<string> tcs) {
+        Response requestData = new Response(data);
         string jsonData = JsonUtility.ToJson(requestData);
-
-        using (var uwr = new UnityWebRequest(URL + "/speech", "POST")) {
+        using (var uwr = new UnityWebRequest(URL + "/"+type, "POST")) {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
             uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -81,29 +76,49 @@ public class APIController : MonoBehaviour {
             if (uwr.result != UnityWebRequest.Result.Success) {
                 Debug.Log("Error While Sending: " + uwr.error);
                 tcs.SetResult(null);
-
             }
             else {
-       
                 tcs.SetResult(uwr.downloadHandler.text);
             }
         }
     }
-
-    void Update() {
-        
+    public Task<string> getReset() {
+        var tcs = new TaskCompletionSource<string>();
+        StartCoroutine(Reset(tcs));
+        return tcs.Task;
     }
 
+    private IEnumerator Reset(TaskCompletionSource<string> tcs) {
+        using (var uwr = new UnityWebRequest(URL + "/reset", "GET")) {
+            yield return uwr.SendWebRequest();
+
+            // Check for errors
+            if (uwr.result != UnityWebRequest.Result.Success) {
+                Debug.Log("Error While Resetting: " + uwr.error);
+                tcs.SetResult(null);
+            }
+            else {
+                // Handle the successful response
+                string responseText = uwr.downloadHandler.text;
+                Debug.Log("Memory reset successfully: " + responseText);
+                tcs.SetResult(responseText);
+            }
+        }
+    }
+
+
+
+
+    // Sending parameters every 4 seconds
     private IEnumerator SendParametersEveryFourSeconds() {
         while (true) {
             Vector3 studentPosition = _student.transform.position;
-           
             string photoPath = _webcamController.CapturePhoto();
 
             if (string.IsNullOrEmpty(photoPath)) {
                 Debug.Log("Failed to capture photo. Skipping this iteration.");
                 yield return new WaitForSeconds(1f);
-                continue; 
+                continue;
             }
 
             string photoBase64 = ConvertPngToBase64(photoPath);
@@ -112,7 +127,7 @@ public class APIController : MonoBehaviour {
 
             ParametersRequest parametersRequest = new ParametersRequest(studentPosition, photoBase64, isLookingTeacher, isLookingBoard);
             string jsonData = JsonUtility.ToJson(parametersRequest);
-            Debug.Log("We want to send!:"+jsonData);
+            Debug.Log("We want to send: " + jsonData);
 
             using (var uwr = new UnityWebRequest(URL + "/parameters", "POST")) {
                 byte[] jsonToSend = System.Text.Encoding.UTF8.GetBytes(jsonData);
@@ -130,30 +145,19 @@ public class APIController : MonoBehaviour {
                     Debug.Log("Parameters sent successfully: " + responseText);
 
                     ParametersResponse response = JsonUtility.FromJson<ParametersResponse>(responseText);
-                    
                     _emotionController.SetEmotion(response.emotion, response.intensity);
                     _gazeController.SetGazeDirectionDetermined(response.look_direction);
-                    if (response != null) {
-                        Debug.Log("No Response");
-                    }
-                    else {
-                        Debug.LogError("Failed to deserialize response.");
-                    }
                 }
             }
 
-            yield return new WaitForSeconds(1f); // Wait for 4 seconds before sending again
+            yield return new WaitForSeconds(4f); // Wait for 4 seconds before sending again
         }
     }
 
-
+    // Convert PNG image to base64 string
     public string ConvertPngToBase64(string filePath) {
         byte[] imageBytes = File.ReadAllBytes(filePath);
-
         string base64String = Convert.ToBase64String(imageBytes);
-
         return base64String;
     }
-
-
 }
