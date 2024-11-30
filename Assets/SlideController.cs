@@ -83,9 +83,11 @@ public class SlideController : MonoBehaviour {
         }
     }
 
-    public void TextShow(string text)
-    {
-        DisableProjector();
+    public void TextShow(string text) {
+        if (string.IsNullOrEmpty(text)) {
+            return;
+        } 
         _slideText.text = text;
     }
+
 }

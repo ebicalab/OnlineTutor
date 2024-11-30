@@ -11,6 +11,7 @@ public class MicrophoneController2 : MonoBehaviour
 {
     [SerializeField] private APIController _apiController;
     [SerializeField] private AudioController _audioController;
+    [SerializeField] private SlideController _slideController;
 
     private bool isRecording = false;
     private AudioClip audioClip;
@@ -62,6 +63,8 @@ public class MicrophoneController2 : MonoBehaviour
 
                 if (jsonResponse != null) {
                     SpeechResponse speechResponse = JsonUtility.FromJson<SpeechResponse>(jsonResponse);
+                    _slideController.TextShow(speechResponse.board);
+
 
 
                     var uploadFolderPath = $"{Application.dataPath}/Resources/Uploads";
@@ -151,6 +154,7 @@ public class MicrophoneController2 : MonoBehaviour
     [Serializable]
     public class SpeechResponse {
         public string audio_base64; // Matches the key in the JSON response
+        public string board;
     }
 
 }

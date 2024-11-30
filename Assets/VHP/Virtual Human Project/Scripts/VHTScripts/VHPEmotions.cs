@@ -155,11 +155,13 @@ public class VHPEmotions : MonoBehaviour
 
                 m_currentEmotion = (Emotions)i;
 
+                
                 // All other intensity values are set to 0 as they are mutually exclusive.
                 for (int j = 0; j < currentEmotionsIntensityValues.Length; j++)
                     if (j != (int)m_currentEmotion)
                         currentEmotionsIntensityValues[j] = 0;
 
+                        
                 m_anger = currentEmotionsIntensityValues[0];
                 m_disgust = currentEmotionsIntensityValues[1];
                 m_fear = currentEmotionsIntensityValues[2];

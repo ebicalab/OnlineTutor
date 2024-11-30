@@ -9,6 +9,7 @@ public class InputHandler : MonoBehaviour {
     [SerializeField] private APIController _apiController;
     [SerializeField] private AudioController _audioController;
     [SerializeField] private FirstPersonController _firstPersoncontroller;
+    [SerializeField] private SlideController _slideController;
 
 
     private bool isTyping = false;
@@ -21,13 +22,24 @@ public class InputHandler : MonoBehaviour {
         if (isTyping) {
             BlockMovementKeys();
         }
-        else
+        else {
             UnlockMovementKeys();
+        }
 
-        if (isTyping && Input.GetKeyDown(KeyCode.Return)) {
+        // Handle Shift + Enter (Add a new line to the input field)
+        if (isTyping && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Return)) {
+            AddNewLine();
+        }
+
+        // Handle Enter (Submit input if Shift is not held)
+        if (isTyping && Input.GetKeyDown(KeyCode.Return) && !Input.GetKey(KeyCode.LeftShift)) {
             SubmitInput();
         }
-        
+
+       
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X)) {
+            Clear();
+        }
     }
 
     private void FocusInputField() {
@@ -40,6 +52,7 @@ public class InputHandler : MonoBehaviour {
         isTyping = false;
         if (_inputField.text == "")
             return;
+
         _inputField.DeactivateInputField();
         string question = _inputField.text;
         _inputField.text = "";
@@ -48,6 +61,7 @@ public class InputHandler : MonoBehaviour {
         Debug.Log("Received: " + jsonResponse);
         if (jsonResponse != null) {
             SpeechResponse speechResponse = JsonUtility.FromJson<SpeechResponse>(jsonResponse);
+            _slideController.TextShow(speechResponse.board);
             var uploadFolderPath = $"{Application.dataPath}/Resources/Uploads";
             if (!Directory.Exists(uploadFolderPath)) {
                 Directory.CreateDirectory(uploadFolderPath);
@@ -62,7 +76,6 @@ public class InputHandler : MonoBehaviour {
         else {
             Debug.LogWarning("Received null response from API.");
         }
-
     }
 
     private void SaveWavToFile(string base64, string filePath) {
@@ -71,22 +84,32 @@ public class InputHandler : MonoBehaviour {
         Debug.Log($"WAV file saved to: {filePath}");
     }
 
+    private void AddNewLine() {
+        // Add a newline character to the input field text
+        _inputField.text += "\n";
+    }
 
     private void BlockMovementKeys() {
-        //block movement
+        // Block movement
         _firstPersoncontroller.playerCanMove = false;
         _firstPersoncontroller.enableJump = false;
         _firstPersoncontroller.enableSprint = false;
     }
-    private void UnlockMovementKeys(){
-        //unlock
+
+    private void UnlockMovementKeys() {
+        // Unlock movement
         _firstPersoncontroller.playerCanMove = true;
         _firstPersoncontroller.enableJump = true;
         _firstPersoncontroller.enableSprint = true;
     }
 
+    private void Clear(){
+        _inputField.text = "";
+    }
+
     [Serializable]
     public class SpeechResponse {
-        public string audio_base64; 
+        public string audio_base64;
+        public string board;
     }
 }

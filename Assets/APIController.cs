@@ -51,21 +51,53 @@ public class APIController : MonoBehaviour {
     [SerializeField] private WebcamController _webcamController;
     [SerializeField] private EmotionController _emotionController;
 
+    private bool isSpeechRequestInProgress = false;
+
     void Start() {
         StartCoroutine(SendParametersEveryFourSeconds());
     }
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.F1)) {
+            getReset();
+        }
 
-    // Async POST request for audio data
-    public Task<string> postRequestAsync(string data, string type) {
-        var tcs = new TaskCompletionSource<string>();
-        StartCoroutine(SendRequest(data, type, tcs));
-        return tcs.Task;
     }
 
+    public void StartReset() {
+        if (!isSpeechRequestInProgress) {
+            getReset(); // Trigger reset logic
+        }
+        else {
+            Debug.Log("Speech request in progress. Please wait.");
+        }
+    }
+
+    public async Task<string> postRequestAsync(string data, string type) {
+        if (isSpeechRequestInProgress) {
+            Debug.Log("Speech request is already in progress.");
+            return null;
+        }
+
+        isSpeechRequestInProgress = true;
+
+        try {
+            var tcs = new TaskCompletionSource<string>();
+
+            StartCoroutine(SendRequest(data, type, tcs));
+
+            return await tcs.Task;
+        }
+        finally {
+            isSpeechRequestInProgress = false;
+        }
+    }
+
+
     private IEnumerator SendRequest(string data, string type, TaskCompletionSource<string> tcs) {
+
         Response requestData = new Response(data);
         string jsonData = JsonUtility.ToJson(requestData);
-        using (var uwr = new UnityWebRequest(URL + "/"+type, "POST")) {
+        using (var uwr = new UnityWebRequest(URL + "/" + type, "POST")) {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
             uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -98,10 +130,7 @@ public class APIController : MonoBehaviour {
                 tcs.SetResult(null);
             }
             else {
-                // Handle the successful response
-                string responseText = uwr.downloadHandler.text;
-                Debug.Log("Memory reset successfully: " + responseText);
-                tcs.SetResult(responseText);
+                Debug.Log("Memory reset successfully:");
             }
         }
     }
