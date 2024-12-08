@@ -10,52 +10,61 @@ public class InputHandler : MonoBehaviour {
     [SerializeField] private AudioController _audioController;
     [SerializeField] private FirstPersonController _firstPersoncontroller;
     [SerializeField] private SlideController _slideController;
+    [SerializeField] private ExpandInputField _expandInputField;
 
 
-    private bool isTyping = false;
+    public bool isTyping = false;
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.M)) {
-            FocusInputField();
-        }
 
-        if (isTyping) {
-            BlockMovementKeys();
+        if(Input.GetKeyDown(KeyCode.F2)){
+            if(!isTyping){
+                FocusInputField();
+                _expandInputField.ExpandInputFieldSize();
+            }else{
+                _inputField.DeactivateInputField();
+                _expandInputField.ShrinkInputFieldSize();
+                isTyping = false;
+            }
         }
-        else {
-            UnlockMovementKeys();
-        }
-
-        // Handle Shift + Enter (Add a new line to the input field)
+        //new line
         if (isTyping && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Return)) {
             AddNewLine();
         }
-
-        // Handle Enter (Submit input if Shift is not held)
+        //submit
         if (isTyping && Input.GetKeyDown(KeyCode.Return) && !Input.GetKey(KeyCode.LeftShift)) {
             SubmitInput();
         }
-
-       
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X)) {
+        //clear
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X)) {
             Clear();
+            _inputField.DeactivateInputField();
+            _expandInputField.ShrinkInputFieldSize();
+
         }
+        if(isTyping)
+            BlockMovementKeys();
+        else
+            UnlockMovementKeys();
+        
+
     }
 
     private void FocusInputField() {
         _inputField.ActivateInputField();
         _inputField.Select();
+        _inputField.caretPosition = _inputField.text.Length;
         isTyping = true;
     }
 
     private async void SubmitInput() {
-        isTyping = false;
+        //isTyping = false;
         if (_inputField.text == "")
             return;
 
         _inputField.DeactivateInputField();
         string question = _inputField.text;
-        _inputField.text = "";
+        //_inputField.text = "";
 
         string jsonResponse = await _apiController.postRequestAsync(question, "text");
         Debug.Log("Received: " + jsonResponse);

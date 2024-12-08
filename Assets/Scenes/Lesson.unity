@@ -823,7 +823,9 @@ MonoBehaviour:
   _apiController: {fileID: 1051634032}
   _audioController: {fileID: 1248814262}
   _firstPersoncontroller: {fileID: 1608374095}
-  _slideController: {fileID: 0}
+  _slideController: {fileID: 998479281}
+  _expandInputField: {fileID: 153605088}
+  isTyping: 0
 --- !u!114 &153605088
 MonoBehaviour:
   m_ObjectHideFlags: 0

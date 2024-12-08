@@ -16,10 +16,11 @@ public class ExpandInputField : MonoBehaviour {
     public float lerpTime = 0.5f;
     private float timeElapsed = 0f;
 
+    
+
     void Start() {
         rectTransform = inputField.GetComponent<RectTransform>();
 
-        // Set initial size
         SetInputFieldSize(defaultWidth, defaultHeight);
 
         // Ensure the RectTransform is anchored at the lower-left corner
@@ -34,26 +35,12 @@ public class ExpandInputField : MonoBehaviour {
         Debug.Log("Initial Size: " + rectTransform.sizeDelta);
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.M)) {
-            ExpandInputFieldSize();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return) && !Input.GetKey(KeyCode.LeftShift)) {
-            ShrinkInputFieldSize();
-        }
-
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X)) {
-            Clear();
-        }
-    }
-
-    private void ExpandInputFieldSize() {
+    public void ExpandInputFieldSize() {
         timeElapsed = 0f;
         StartCoroutine(AnimateSizeChange(expandedWidth, expandedHeight));
     }
 
-    private void ShrinkInputFieldSize() {
+    public void ShrinkInputFieldSize() {
         timeElapsed = 0f;
         StartCoroutine(AnimateSizeChange(defaultWidth, defaultHeight));
     }
