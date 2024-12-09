@@ -57,7 +57,7 @@ public class APIController : MonoBehaviour {
         StartCoroutine(SendParametersEveryFourSeconds());
     }
     void Update() {
-        if (Input.GetKeyDown(KeyCode.F1)) {
+        if (Input.GetKeyDown(KeyCode.F3)) {
             getReset();
         }
 
