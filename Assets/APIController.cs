@@ -24,9 +24,9 @@ public class Response {
 [Serializable]
 public class ParametersRequest {
     public Vector3 position;
+    public string photo_base64;
     public bool is_looking_teacher;
     public bool is_looking_board;
-    public string photo_base64;
 
     public ParametersRequest(Vector3 position, string photoBase64, bool isLookingTeacher, bool isLookingBoard) {
         this.position = position;
@@ -44,17 +44,22 @@ public class ParametersResponse {
 }
 
 public class APIController : MonoBehaviour {
-    [SerializeField] private string URL = "http://127.0.0.1:5000";
+    [SerializeField] private string URL = "";
     [SerializeField] private AudioController _audioController;
     [SerializeField] private GameObject _student;
     [SerializeField] private GazeController _gazeController;
     [SerializeField] private WebcamController _webcamController;
     [SerializeField] private EmotionController _emotionController;
 
+    private int id_client;
+
     private bool isSpeechRequestInProgress = false;
 
     void Start() {
         StartCoroutine(SendParametersEveryFourSeconds());
+        System.Random random = new System.Random();
+        id_client = random.Next();
+        
     }
     void Update() {
         if (Input.GetKeyDown(KeyCode.F3)) {
@@ -97,7 +102,7 @@ public class APIController : MonoBehaviour {
 
         Response requestData = new Response(data);
         string jsonData = JsonUtility.ToJson(requestData);
-        using (var uwr = new UnityWebRequest(URL + "/" + type, "POST")) {
+        using (var uwr = new UnityWebRequest(URL + "/" + id_client + "/" + type, "POST")) {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
             uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -121,7 +126,7 @@ public class APIController : MonoBehaviour {
     }
 
     private IEnumerator Reset(TaskCompletionSource<string> tcs) {
-        using (var uwr = new UnityWebRequest(URL + "/reset", "GET")) {
+        using (var uwr = new UnityWebRequest(URL + "/" + id_client + "/reset", "DELETE")) {
             yield return uwr.SendWebRequest();
 
             // Check for errors
@@ -158,7 +163,7 @@ public class APIController : MonoBehaviour {
             string jsonData = JsonUtility.ToJson(parametersRequest);
             Debug.Log("We want to send: " + jsonData);
 
-            using (var uwr = new UnityWebRequest(URL + "/parameters", "POST")) {
+            using (var uwr = new UnityWebRequest(URL +"/" + id_client + "/parameters", "POST")) {
                 byte[] jsonToSend = System.Text.Encoding.UTF8.GetBytes(jsonData);
                 uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
                 uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -167,7 +172,7 @@ public class APIController : MonoBehaviour {
                 yield return uwr.SendWebRequest();
 
                 if (uwr.result != UnityWebRequest.Result.Success) {
-                    Debug.Log("Error While Sending Parameters: " + uwr.error);
+                    Debug.Log("Error While Sending Parameters to"+URL+":" + uwr.error);
                 }
                 else {
                     string responseText = uwr.downloadHandler.text;
@@ -189,4 +194,29 @@ public class APIController : MonoBehaviour {
         string base64String = Convert.ToBase64String(imageBytes);
         return base64String;
     }
+
+
+    private void OnApplicationQuit() {
+        Debug.Log("Application is quitting. Removing client...");
+        RemoveClient();
+    }
+
+    private void RemoveClient() {
+        StartCoroutine(ResetClientOnExit());
+    }
+
+    private IEnumerator ResetClientOnExit() {
+        using (var uwr = new UnityWebRequest(URL + "/" + id_client + "/reset", "DELETE")) {
+            yield return uwr.SendWebRequest();
+
+            if (uwr.result != UnityWebRequest.Result.Success) {
+                Debug.LogError("Error while resetting client memory on exit: " + uwr.error);
+            }
+            else {
+                Debug.Log("Client memory reset successfully on exit.");
+            }
+        }
+    }
+
+
 }
