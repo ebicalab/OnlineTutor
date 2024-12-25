@@ -9,11 +9,11 @@ public class GazeController : MonoBehaviour
     [Range(0.25f, 6.5f)] [SerializeField] private float y;
     [Range(3f, 15.7f)] [SerializeField] private float z;
 
-    [SerializeField] private Transform student;
-    [SerializeField] private Transform eyes;
-    [SerializeField] private Transform mouth;
-    [SerializeField] private Transform left;
-    [SerializeField] private Transform right;
+    [SerializeField] private Transform _student;
+    [SerializeField] private Transform _eyes;
+    [SerializeField] private Transform _mouth;
+    [SerializeField] private Transform _left;
+    [SerializeField] private Transform _right;
 
 
 
@@ -70,8 +70,8 @@ public class GazeController : MonoBehaviour
     public bool IsStudentLookingAtTeacher()
     {
         RaycastHit hit;
-        Debug.DrawRay(student.position, student.forward * 100, Color.red);
-        if(Physics.Raycast(student.position, student.forward, out hit)     &&
+        Debug.DrawRay(_student.position, _student.forward * 100, Color.red);
+        if(Physics.Raycast(_student.position, _student.forward, out hit)     &&
                     hit.collider.gameObject.CompareTag("Teacher"))
                     return true;
         return false;
@@ -80,8 +80,8 @@ public class GazeController : MonoBehaviour
     public bool IsStudentLookingAtBoard()
     {
         RaycastHit hit;
-        Debug.DrawRay(student.position, student.forward * 100, Color.red);
-        if(Physics.Raycast(student.position, student.forward, out hit)     &&
+        Debug.DrawRay(_student.position, _student.forward * 100, Color.red);
+        if(Physics.Raycast(_student.position, _student.forward, out hit)     &&
                     hit.collider.gameObject.CompareTag("Board"))
                     return true;
         return false;
@@ -93,19 +93,19 @@ public class GazeController : MonoBehaviour
 
             case 1:
                 //eyes     
-                SetGazeDirection(eyes.position);               
+                SetGazeDirection(_eyes.position);               
                 break;
             case 2:
                 //mouth
-                SetGazeDirection(mouth.position);
+                SetGazeDirection(_mouth.position);
                 break;
             case 3:
                 //right
-                SetGazeDirection(right.position);
+                SetGazeDirection(_right.position);
                 break;
             case 4:
                 //left
-                SetGazeDirection(left.position);
+                SetGazeDirection(_left.position);
                 break;
             
         };
