@@ -5,6 +5,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 
 
@@ -85,7 +87,7 @@ public class AudioController : MonoBehaviour
     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
     
     #if UNITY_EDITOR
-    AssetDatabase.Refresh(); // This will refresh the database only in the editor.
+    AssetDatabase.Refresh(); 
     #endif
 
     AudioClip _clip = Resources.Load<AudioClip>("Uploads/" + fileNameWithoutExtension);
@@ -100,6 +102,113 @@ public class AudioController : MonoBehaviour
         Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
     }
 }
+
+   public async Task PlayShortSoundAbsolute(string path)
+{
+    StopCurrentClip();
+
+    try
+    {
+        AudioClip _clip = await LoadClip(path);
+        if (_clip == null)
+            throw new Exception("Failed to load AudioClip.");
+
+        _audioSource.PlayOneShot(_clip);
+
+    }
+    catch (Exception ex)
+    {
+        Debug.Log($"Error playing sound: {ex.Message}");
+        throw; 
+    }
+}
+
+    private async Task<AudioClip> LoadClip(string path)
+    {
+        string uriPath = GetPlatformSpecificPath(path);
+        Debug.Log("Loading audio from URI: " + uriPath);
+
+        string rawPath = uriPath.Replace("file://", "").Replace("file:", "");
+        if (!File.Exists(rawPath))
+        {
+            Debug.Log("File does not exist: " + rawPath);
+            return null;
+        }
+        if (!IsValidAudioFile(rawPath))
+        {
+            Debug.Log("File is not a valid audio file: " + rawPath);
+            return null;
+        }
+
+        AudioClip clip = null;
+        using (UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(uriPath, AudioType.WAV))
+        {
+            uwr.SendWebRequest();
+
+            try
+            {
+                while (!uwr.isDone)
+                {
+                    await Task.Delay(5);
+                }
+
+                if (uwr.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log($"Error loading audio: {uwr.error}");
+                    throw new Exception("Error loading audio");
+                }
+                else
+                {
+                    clip = DownloadHandlerAudioClip.GetContent(uwr);
+                    if (clip != null)
+                    {
+                        Debug.Log($"Loaded AudioClip: {clip.name} (Length: {clip.length}s)");
+                    }
+                    else
+                    {
+                        throw new Exception("DownloadHandlerAudioClip returned null.");
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Debug.Log($"Exception: {err.Message}");
+                return null;
+            }
+        }
+
+        return clip;
+    }
+
+    private string GetPlatformSpecificPath(string path)
+    {
+        return "file://" + path.Replace("\\", "/");
+    }
+
+    private bool IsValidAudioFile(string path)
+    {
+        try
+        {
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                byte[] header = new byte[4];
+                fs.Read(header, 0, 4);
+
+                if (header[0] == 'R' && header[1] == 'I' && header[2] == 'F' && header[3] == 'F')
+                {
+                    return true;
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"Error validating audio file: {ex.Message}");
+        }
+
+        return false;
+    }
+
 
      
 
