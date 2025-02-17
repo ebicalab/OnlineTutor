@@ -27,7 +27,9 @@ public class WebcamController : MonoBehaviour
         }
     }
 
-    
+    void Update()
+    {
+    }
 
     public string CapturePhoto()
     {

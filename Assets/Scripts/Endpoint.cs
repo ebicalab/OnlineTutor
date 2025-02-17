@@ -323,23 +323,24 @@ public class Endpoint : MonoBehaviour
         });
 
     }
+ 
 
+    [System.Serializable]
+    public class Look {
+        public int look_direction;
+    }
+
+
+    [System.Serializable]
+    public class SlideText {
+        public string text;
+    }
+
+    [System.Serializable]
+    public class EmotionRequest {
+        public string emotion;
+        public float intensity;
+    }
 
 }
 
-[System.Serializable]
-public class EmotionRequest {
-    public string emotion;
-    public float intensity;
-}
-
-[System.Serializable]
-public class Look {
-    public int look_direction;
-}
-
-
-[System.Serializable]
-public class SlideText {
-    public string text;
-}

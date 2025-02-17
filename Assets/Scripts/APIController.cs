@@ -56,7 +56,7 @@ public class APIController : MonoBehaviour {
     private bool isSpeechRequestInProgress = false;
 
     void Start() {
-        StartCoroutine(SendParametersEveryFourSeconds());
+        StartCoroutine(SendParametersEveryNSeconds());
         System.Random random = new System.Random();
         id_client = random.Next();
         
@@ -144,7 +144,8 @@ public class APIController : MonoBehaviour {
 
 
     // Sending parameters every 4 seconds
-    private IEnumerator SendParametersEveryFourSeconds() {
+    private IEnumerator SendParametersEveryNSeconds() {
+        int time = 4;
         while (true) {
             Vector3 studentPosition = _student.transform.position;
             string photoPath = _webcamController.CapturePhoto();
