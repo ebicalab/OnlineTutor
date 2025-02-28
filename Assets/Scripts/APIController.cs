@@ -12,12 +12,22 @@ using System.IO;
 
 [Serializable]
 public class Response {
-    public string text_question;
+    public string audio_base64;
 
     public Response(string data_init) {
+        audio_base64 = data_init;
+    }
+}
+
+[Serializable]
+public class ResponseText {
+    public string text_question;
+
+    public ResponseText(string data_init) {
         text_question = data_init;
     }
 }
+
 
 
 
@@ -99,9 +109,9 @@ public class APIController : MonoBehaviour {
 
 
     private IEnumerator SendRequest(string data, string type, TaskCompletionSource<string> tcs) {
-
-        Response requestData = new Response(data);
+        object requestData = type == "speech" ? (object)new Response(data) : new ResponseText(data);
         string jsonData = JsonUtility.ToJson(requestData);
+
         using (var uwr = new UnityWebRequest(URL + "/" + id_client + "/" + type, "POST")) {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
@@ -119,6 +129,8 @@ public class APIController : MonoBehaviour {
             }
         }
     }
+
+
     public Task<string> getReset() {
         var tcs = new TaskCompletionSource<string>();
         StartCoroutine(Reset(tcs));

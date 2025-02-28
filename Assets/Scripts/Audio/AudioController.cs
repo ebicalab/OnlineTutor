@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 
 
-public class AudioController : MonoBehaviour
-{
+public class AudioController : MonoBehaviour {
     [SerializeField] private AudioSource _audioSource;
 
     public static string DefaultMicroName { get; set; }
@@ -25,13 +24,13 @@ public class AudioController : MonoBehaviour
 
 
 
-    
+
 
 
 
     public void StartMicrophoneRecord() {
         StartCoroutine(StartMicrophoneRecordCoroutine());
-    }   
+    }
 
     private IEnumerator StartMicrophoneRecordCoroutine() {
         yield return new WaitForSeconds(2.0f);
@@ -72,7 +71,8 @@ public class AudioController : MonoBehaviour
         directoryPath = $"{Application.dataPath}/Resources/Uploads";
         if (Microphone.devices.Length <= 0) {
             Debug.LogError("�� ��������� �� ���� ��������!");
-        } else {
+        }
+        else {
             DefaultMicroName = Microphone.devices[0];
         }
     }
@@ -81,53 +81,47 @@ public class AudioController : MonoBehaviour
         _audioSource.PlayOneShot(clip);
     }
 
-    public void playShortSound(string path)
-{
+    public void playShortSound(string path) {
         StopCurrentClip();
-    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-    
-    #if UNITY_EDITOR
-    AssetDatabase.Refresh(); 
-    #endif
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
 
-    AudioClip _clip = Resources.Load<AudioClip>("Uploads/" + fileNameWithoutExtension);
-    
-    if (_clip != null)
-    {
-        Debug.Log("AudioClip loaded successfully.");
-        _audioSource.PlayOneShot(_clip);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+
+        AudioClip _clip = Resources.Load<AudioClip>("Uploads/" + fileNameWithoutExtension);
+
+        if (_clip != null) {
+            Debug.Log("AudioClip loaded successfully.");
+            _audioSource.PlayOneShot(_clip);
+        }
+        else {
+            Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
+        }
     }
-    else
-    {
-        Debug.LogError("Failed to load AudioClip. Check the path and ensure the file is located in a Resources folder.");
+
+    public async Task PlayShortSoundAbsolute(string path) {
+        StopCurrentClip();
+
+        try {
+            AudioClip _clip = await LoadClip(path);
+            if (_clip == null)
+                throw new Exception("Failed to load AudioClip.");
+
+            _audioSource.PlayOneShot(_clip);
+
+        }
+        catch (Exception ex) {
+            Debug.Log($"Error playing sound: {ex.Message}");
+            throw;
+        }
     }
-}
-
-   public async Task PlayShortSoundAbsolute(string path)
-{
-    StopCurrentClip();
-
-    try
-    {
-        AudioClip _clip = await LoadClip(path);
-        if (_clip == null)
-            throw new Exception("Failed to load AudioClip.");
-
-        _audioSource.PlayOneShot(_clip);
-
-    }
-    catch (Exception ex)
-    {
-        Debug.Log($"Error playing sound: {ex.Message}");
-        throw; 
-    }
-}
 
     private async Task<AudioClip> LoadClip(string path) {
         string uriPath = GetPlatformSpecificPath(path);
         Debug.Log("Loading audio from URI: " + uriPath);
 
-        string rawPath = new Uri(uriPath).LocalPath; 
+        string rawPath = new Uri(uriPath).LocalPath;
         Debug.Log($"Extracted raw path: {rawPath}");
 
         if (!File.Exists(rawPath)) {
@@ -171,7 +165,7 @@ public class AudioController : MonoBehaviour
 
 
     private string GetPlatformSpecificPath(string path) {
-        string formattedPath = path.Replace("\\", "/"); 
+        string formattedPath = path.Replace("\\", "/");
         if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor) {
             return "file:///" + formattedPath; // Windows: `file:///C:/...`
         }
@@ -247,8 +241,7 @@ public class AudioController : MonoBehaviour
         return 0.0f;
     }
 
-    public void StopCurrentClip()
-    {
+    public void StopCurrentClip() {
         _audioSource.Stop();
     }
 
@@ -264,29 +257,23 @@ public class AudioController : MonoBehaviour
         return _audioSource.time;
     }
 
-    public void Delete()
-    {
-         if (Directory.Exists(directoryPath))
-            {
-                try
-                {
-                    DirectoryInfo di = new DirectoryInfo(directoryPath);
-                    foreach (FileInfo file in di.GetFiles())
-                    {
-                        file.Delete();
-                    }
-                    Debug.Log("All received audio deleted.");
+    public void Delete() {
+        if (Directory.Exists(directoryPath)) {
+            try {
+                DirectoryInfo di = new DirectoryInfo(directoryPath);
+                foreach (FileInfo file in di.GetFiles()) {
+                    file.Delete();
                 }
-                catch (System.Exception ex)
-                {
-                    Debug.LogError("Failed to delete received audio: " + ex.Message);
-                }
+                Debug.Log("All received audio deleted.");
             }
+            catch (System.Exception ex) {
+                Debug.LogError("Failed to delete received audio: " + ex.Message);
+            }
+        }
 
     }
 
-     void OnDestroy()
-     {
+    void OnDestroy() {
         Delete();
-     }
+    }
 }

@@ -68,6 +68,7 @@ public class MicrophoneController2 : MonoBehaviour
 
 
                     var uploadFolderPath = $"{Application.dataPath}/Resources/Uploads";
+                    
                     if (!Directory.Exists(uploadFolderPath)) {
                         Directory.CreateDirectory(uploadFolderPath);
                     }
